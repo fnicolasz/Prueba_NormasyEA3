@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evaluación Módulo EA3 — 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0d1117;--card:#161b22;--border:#30363d;--accent:#58a6ff;--green:#3fb950;--red:#f85149;--gold:#e3b341;--text:#e6edf3;--text2:#8b949e;--radius:12px;--shadow:0 4px 24px rgba(0,0,0,.4)}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+h1,h2,h3,h4{font-family:'Sora',sans-serif;font-weight:700}
+.hero{text-align:center;padding:3rem 1.5rem 2rem;background:linear-gradient(180deg,#161b2280 0%,var(--bg) 100%);border-bottom:1px solid var(--border)}
+.hero h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;background:linear-gradient(135deg,var(--accent),#a371f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.5rem}
+.hero p{color:var(--text2);font-size:1.05rem;max-width:600px;margin:0 auto .8rem}
+.badges{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-top:1rem}
+.badge{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:.3rem .9rem;font-size:.8rem;color:var(--text2);font-weight:600}
+.badge strong{color:var(--accent)}
+.progress-bar-wrap{max-width:600px;margin:1.2rem auto 0;background:var(--border);border-radius:8px;height:8px;overflow:hidden}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:8px;transition:width .4s ease;width:0%}
+.nav-blocks{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);padding:.6rem 1rem;display:flex;gap:.5rem;overflow-x:auto;justify-content:center;flex-wrap:wrap}
+.nav-btn{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.4rem .8rem;color:var(--text2);font-size:.75rem;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;white-space:nowrap}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--accent)}
+.nav-btn .prog{font-size:.65rem;opacity:.7;margin-left:.3rem}
+.container{max-width:900px;margin:0 auto;padding:1.5rem}
+.section-title{font-size:1.5rem;margin:2rem 0 1rem;padding-bottom:.5rem;border-bottom:2px solid var(--border);display:flex;align-items:center;gap:.6rem}
+.section-title .icon{font-size:1.3rem}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.3rem;margin-bottom:1rem;animation:fadeIn .3s ease;position:relative}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.8rem;gap:.5rem;flex-wrap:wrap}
+.q-number{font-family:'Sora',sans-serif;font-weight:700;color:var(--accent);font-size:.85rem}
+.q-badges{display:flex;gap:.4rem;flex-wrap:wrap}
+.bloque-badge{font-size:.65rem;padding:.15rem .5rem;border-radius:10px;font-weight:600;border:1px solid}
+.bloque-1{color:#58a6ff;border-color:#58a6ff40;background:#58a6ff10}
+.bloque-2{color:#a371f7;border-color:#a371f740;background:#a371f710}
+.bloque-3{color:#e3b341;border-color:#e3b34140;background:#e3b34110}
+.bloque-4{color:#3fb950;border-color:#3fb95040;background:#3fb95010}
+.bloque-5{color:#f778ba;border-color:#f778ba40;background:#f778ba10}
+.bloque-6{color:#ffa657;border-color:#ffa65740;background:#ffa65710}
+.diff-badge{font-size:.6rem;padding:.12rem .45rem;border-radius:10px;background:var(--border);color:var(--text2);font-weight:500}
+.q-text{font-size:.95rem;margin-bottom:1rem;line-height:1.65}
+.options{display:flex;flex-direction:column;gap:.5rem}
+.opt-btn{display:flex;align-items:flex-start;gap:.6rem;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:.7rem .9rem;cursor:pointer;transition:all .2s;text-align:left;font-family:'Inter',sans-serif;font-size:.88rem;color:var(--text);line-height:1.5;width:100%}
+.opt-btn:hover:not(.disabled){border-color:var(--accent);background:#58a6ff08}
+.opt-btn .letter{font-family:'Sora',sans-serif;font-weight:700;color:var(--accent);min-width:1.4rem;flex-shrink:0}
+.opt-btn.correct{border-color:var(--green);background:#3fb95015}
+.opt-btn.correct .letter{color:var(--green)}
+.opt-btn.wrong{border-color:var(--red);background:#f8514915}
+.opt-btn.wrong .letter{color:var(--red)}
+.opt-btn.disabled{opacity:.5;cursor:default;pointer-events:none}
+.opt-btn.correct.disabled{opacity:1}
+.vf-options{display:flex;gap:.8rem}
+.vf-btn{flex:1;padding:.8rem;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;font-weight:600;font-size:.95rem;cursor:pointer;transition:all .2s;text-align:center}
+.vf-btn:hover:not(.disabled){border-color:var(--accent)}
+.vf-btn.correct{border-color:var(--green);background:#3fb95015;color:var(--green)}
+.vf-btn.wrong{border-color:var(--red);background:#f8514915;color:var(--red)}
+.vf-btn.disabled{opacity:.5;cursor:default;pointer-events:none}
+.vf-btn.correct.disabled{opacity:1}
+.feedback{margin-top:.8rem;padding:.9rem;border-radius:8px;font-size:.85rem;line-height:1.6;display:none}
+.feedback.show{display:block;animation:fadeIn .3s ease}
+.feedback.correct-fb{background:#3fb95010;border:1px solid #3fb95030}
+.feedback.wrong-fb{background:#f8514910;border:1px solid #f8514930}
+.feedback .fb-title{font-family:'Sora',sans-serif;font-weight:700;margin-bottom:.3rem;font-size:.9rem}
+.feedback .fb-title.ok{color:var(--green)}
+.feedback .fb-title.fail{color:var(--red)}
+.feedback .fb-source{display:inline-block;margin-top:.4rem;font-size:.75rem;color:var(--text2);background:var(--border);padding:.15rem .45rem;border-radius:6px}
+.dev-card{border-left:3px solid var(--gold)}
+.dev-card .q-number{color:var(--gold)}
+.dev-textarea{width:100%;min-height:100px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:.7rem;color:var(--text);font-family:'Inter',sans-serif;font-size:.88rem;resize:vertical;line-height:1.6}
+.dev-textarea:focus{outline:none;border-color:var(--gold)}
+.pauta-btn{background:var(--gold);color:#0d1117;border:none;border-radius:8px;padding:.5rem 1rem;font-family:'Sora',sans-serif;font-weight:600;font-size:.82rem;cursor:pointer;margin-top:.6rem;transition:opacity .2s}
+.pauta-btn:hover{opacity:.85}
+.pauta{margin-top:.6rem;padding:.9rem;background:#e3b34108;border:1px solid #e3b34125;border-radius:8px;font-size:.85rem;line-height:1.65;display:none}
+.pauta.show{display:block;animation:fadeIn .3s ease}
+.pauta strong{color:var(--gold)}
+.floating-panel{position:fixed;bottom:1rem;right:1rem;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:.8rem 1rem;box-shadow:var(--shadow);z-index:200;font-size:.78rem;min-width:200px}
+.floating-panel .fp-title{font-family:'Sora',sans-serif;font-weight:700;font-size:.75rem;color:var(--text2);margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.5px}
+.fp-row{display:flex;justify-content:space-between;padding:.15rem 0;color:var(--text2)}
+.fp-row .val{font-weight:600;color:var(--text)}
+.fp-row .val.g{color:var(--green)}
+.fp-row .val.r{color:var(--red)}
+.fp-row .val.a{color:var(--accent)}
+.fp-nota{margin-top:.4rem;padding-top:.4rem;border-top:1px solid var(--border);text-align:center}
+.fp-nota .nota-val{font-family:'Sora',sans-serif;font-size:1.3rem;font-weight:800}
+.summary-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:300;justify-content:center;align-items:center;padding:1rem}
+.summary-overlay.show{display:flex}
+.summary-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem;max-width:550px;width:100%;max-height:90vh;overflow-y:auto;text-align:center}
+.summary-box h2{font-size:1.5rem;margin-bottom:.3rem}
+.summary-nota{font-size:3rem;font-weight:800;font-family:'Sora',sans-serif;margin:.5rem 0}
+.summary-msg{color:var(--text2);margin-bottom:1rem;font-size:.95rem}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;text-align:left;margin:1rem 0}
+.sg-item{background:var(--bg);border-radius:8px;padding:.6rem .8rem;font-size:.8rem}
+.sg-item .sg-label{color:var(--text2);font-size:.7rem;text-transform:uppercase}
+.sg-item .sg-val{font-weight:700;font-size:1rem;margin-top:.15rem}
+.summary-btns{display:flex;gap:.6rem;justify-content:center;margin-top:1rem;flex-wrap:wrap}
+.sum-btn{padding:.6rem 1.2rem;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;font-weight:600;font-size:.85rem;cursor:pointer;transition:all .2s}
+.sum-btn:hover{border-color:var(--accent);color:var(--accent)}
+.sum-btn.primary{background:var(--accent);color:#0d1117;border-color:var(--accent)}
+.sum-btn.primary:hover{opacity:.85}
+.hidden{display:none!important}
+@media(max-width:768px){
+.floating-panel{bottom:0;right:0;left:0;border-radius:12px 12px 0 0;display:flex;gap:1rem;align-items:center;justify-content:space-around;padding:.6rem}
+.floating-panel .fp-title{display:none}
+.fp-nota{margin:0;padding:0;border:0}
+.container{padding:1rem}
+.nav-blocks{justify-content:flex-start}
+.summary-grid{grid-template-columns:1fr}
+.vf-options{flex-direction:column;gap:.5rem}
+}
+</style>
+</head>
+<body>
+<div class="hero">
+<h1>EVALUACIÓN MÓDULO EA3</h1>
+<p>Actividad Económica, Empresa, Tributación y Remuneraciones</p>
+<div class="badges">
+<span class="badge"><strong>105</strong> preguntas</span>
+<span class="badge">Actualizado <strong>2026</strong></span>
+<span class="badge">Semanas 11–15</span>
+</div>
+<div class="progress-bar-wrap"><div class="progress-bar-fill" id="mainProgress"></div></div>
+</div>
+<nav class="nav-blocks" id="navBlocks"></nav>
+<div class="container" id="quizContainer"></div>
+<div class="floating-panel" id="floatingPanel">
+<div class="fp-title">Resultados</div>
+<div class="fp-row"><span>Correctas</span><span class="val g" id="fpOk">0</span></div>
+<div class="fp-row"><span>Incorrectas</span><span class="val r" id="fpFail">0</span></div>
+<div class="fp-row"><span>Avance</span><span class="val a" id="fpPct">0%</span></div>
+<div class="fp-nota"><div class="nota-val" id="fpNota">—</div><div style="font-size:.65rem;color:var(--text2)">Nota</div></div>
+</div>
+<div class="summary-overlay" id="summaryOverlay">
+<div class="summary-box" id="summaryBox"></div>
+</div>
+<script>
+const bloqueNames=["Empresa y Clasificación","Permiso Municipal","Impuestos en Chile","Liquidación de Sueldo","Previred","Declaraciones Juradas"];
+const bloqueClasses=["bloque-1","bloque-2","bloque-3","bloque-4","bloque-5","bloque-6"];
+const preguntas=[
+// ===== BLOQUE 1: EMPRESA Y CLASIFICACIÓN (10 alternativas) =====
+{id:1,tipo:"alternativa",bloque:1,nombreBloque:bloqueNames[0],dificultad:"Básico",pregunta:"¿Cuáles son los factores de la actividad económica?",alternativas:["Capital, trabajo y tecnología","Oferta, demanda y equilibrio","Necesidades humanas, recursos y técnicas de producción","Producción, distribución y consumo"],correcta:2,retroalimentacion:"La actividad económica se organiza en torno a tres factores fundamentales: las necesidades humanas (que son múltiples e ilimitadas), los recursos (que son escasos) y las técnicas de producción. Los dos últimos se combinan dentro de las empresas para satisfacer las necesidades.",fuente:"Contenido Semana 11, Slide 3"},
+{id:2,tipo:"alternativa",bloque:1,nombreBloque:bloqueNames[0],dificultad:"Intermedio",pregunta:"Según el Art. 3° del Código del Trabajo (modificado por la Ley N° 20.760), ¿cuál de las siguientes afirmaciones describe correctamente el concepto legal de empresa?",alternativas:["Es toda organización con fines exclusivamente económicos y con capital mínimo de 1.000 UF","Es una persona jurídica que realiza actividades comerciales y tributa en primera categoría","Es una sociedad mercantil inscrita en el Registro de Comercio con al menos dos socios","Es toda organización de medios personales, materiales e inmateriales ordenados bajo la dirección de un empleador, para el logro de fines económicos, sociales, culturales o benéficos, dotada de individualidad legal determinada"],correcta:3,retroalimentacion:"La definición legal de empresa según el Código del Trabajo es amplia: no requiere fines exclusivamente económicos (puede tener fines sociales, culturales o benéficos), no exige un capital mínimo ni un número mínimo de socios. Lo clave es que sea una organización de medios bajo un empleador, con individualidad legal determinada.",fuente:"Art. 3° Código del Trabajo, Ley N° 20.760"},
+{id:3,tipo:"alternativa",bloque:1,nombreBloque:bloqueNames[0],dificultad:"Básico",pregunta:"Una empresa que se dedica a la extracción de cobre pertenece al sector:",alternativas:["Primario, porque explota recursos naturales","Terciario, porque exporta servicios","Secundario, porque transforma materias primas","Cuaternario, porque usa alta tecnología"],correcta:0,retroalimentacion:"Las empresas del sector primario se dedican a la explotación de recursos naturales, ya sean renovables o no renovables. La minería del cobre es un ejemplo clásico del sector primario en Chile, junto con la agricultura y la actividad forestal.",fuente:"Semana 11, Slide 6"},
+{id:4,tipo:"alternativa",bloque:1,nombreBloque:bloqueNames[0],dificultad:"Intermedio",pregunta:"¿Cuál es la principal diferencia entre una empresa de persona natural y una empresa de persona jurídica?",alternativas:["La empresa de persona natural funciona con el mismo RUT del dueño y este responde con su patrimonio personal; la jurídica tiene RUT propio y patrimonio separado","La empresa de persona natural solo puede vender productos, la jurídica solo servicios","La persona natural tiene más beneficios tributarios que la jurídica","La persona natural no puede tener empleados a su cargo"],correcta:0,retroalimentacion:"En una empresa de persona natural, el empresario ejerce todos los derechos y obligaciones a su nombre, usando su propio RUT y respondiendo con su patrimonio personal. En cambio, la persona jurídica tiene nombre, RUT y patrimonio propios, distintos a los de su(s) dueño(s), lo que limita la responsabilidad del titular según el tipo societario.",fuente:"Semana 11, Slides 10-11"},
+{id:5,tipo:"alternativa",bloque:1,nombreBloque:bloqueNames[0],dificultad:"Intermedio",pregunta:"¿Cuál es el número máximo de socios que puede tener una Sociedad de Responsabilidad Limitada (SRL)?",alternativas:["50 socios","100 socios","No tiene límite de socios","25 socios"],correcta:0,retroalimentacion:"La SRL tiene una limitación específica: no puede tener más de 50 socios. Si supera ese número, la sociedad adolece de un vicio de nulidad. Esta restricción no se aplica a otros tipos societarios como la S.A. o la SpA.",fuente:"Semana 11, Slide 13"},
+{id:6,tipo:"alternativa",bloque:1,nombreBloque:bloqueNames[0],dificultad:"Avanzado",pregunta:"¿Cuál es la característica fundamental que distingue a la Sociedad Anónima (S.A.) de otros tipos societarios?",alternativas:["Puede tener un solo socio","Su capital se divide en acciones y el socio solo arriesga el monto de las acciones suscritas, sin comprometer su patrimonio personal","Está exenta del Impuesto de Primera Categoría","Solo puede ser administrada por un directorio de al menos 7 miembros"],correcta:1,retroalimentacion:"La característica fundamental de la S.A. es que el socio solo aporta capital (mediante acciones) y no responde personalmente por las deudas sociales. Su riesgo se limita al valor de las acciones suscritas, a diferencia de otros tipos de sociedad donde los socios pueden responder con su patrimonio personal.",fuente:"Semana 11, Slide 14"},
+{id:7,tipo:"alternativa",bloque:1,nombreBloque:bloqueNames[0],dificultad:"Intermedio",pregunta:"¿Qué ventaja principal tiene la Sociedad por Acciones (SpA) para un emprendedor?",alternativas:["Está exenta de todo tipo de impuestos durante los primeros 3 años","Tiene un límite máximo de 10 socios","No requiere escritura pública para su constitución","Puede crearse como sociedad unipersonal y después ir agregando nuevos socios"],correcta:3,retroalimentacion:"La SpA tiene la ventaja de poder constituirse con un solo socio (unipersonal) y luego ir incorporando nuevos socios de cualquier tipo, incluyendo personas jurídicas y socios puramente capitalistas. Es una forma societaria flexible, ideal para emprendimientos en crecimiento. Es importante recordar que tributa como sociedad anónima.",fuente:"Semana 11, Slide 16"},
+{id:8,tipo:"alternativa",bloque:1,nombreBloque:bloqueNames[0],dificultad:"Básico",pregunta:"Las empresas cuyo capital pertenece totalmente a particulares se clasifican como:",alternativas:["Empresas públicas","Empresas mixtas","Empresas estatales","Empresas privadas"],correcta:3,retroalimentacion:"Según la clasificación por propiedad del capital, las empresas privadas son aquellas cuyo capital pertenece totalmente a particulares. Cuando el Estado es el dueño se denominan públicas, y cuando el capital tiene aportes tanto del Estado como de privados, se denominan mixtas.",fuente:"Semana 11, Slide 7"},
+{id:9,tipo:"alternativa",bloque:1,nombreBloque:bloqueNames[0],dificultad:"Avanzado",pregunta:"En una Sociedad en Comandita, ¿quiénes tienen la facultad de administración?",alternativas:["Los socios capitalistas","Los socios comanditarios","Los socios gestores","Todos los socios por igual"],correcta:2,retroalimentacion:"En la Sociedad en Comandita existen dos clases de socios: los socios gestores, que son los únicos con facultad de administración y que responden por todo el resto de las obligaciones, y los socios comanditarios (pasivos o capitalistas), que solo responden hasta el límite de su aporte.",fuente:"Semana 11, Slide 17"},
+{id:10,tipo:"alternativa",bloque:1,nombreBloque:bloqueNames[0],dificultad:"Intermedio",pregunta:"La EIRL (Empresa Individual de Responsabilidad Limitada) se diferencia de la empresa de persona natural principalmente en que:",alternativas:["La EIRL tiene nombre, RUT y patrimonio propios, distintos a los de su titular, limitando la responsabilidad al aporte inicial","La EIRL puede tener hasta 5 socios","La EIRL no puede realizar operaciones comerciales","La EIRL está exenta del IVA"],correcta:0,retroalimentacion:"La EIRL es una figura jurídica que permite crear una empresa con identidad propia (nombre, RUT, domicilio, patrimonio), distinta a la de su titular o dueño, quien solo será responsable personalmente hasta el monto de su aporte inicial. A diferencia de la persona natural, el titular no arriesga todo su patrimonio personal.",fuente:"Semana 11, Slide 12"},
+// ===== BLOQUE 2: PERMISO MUNICIPAL (10 alternativas) =====
+{id:11,tipo:"alternativa",bloque:2,nombreBloque:bloqueNames[1],dificultad:"Básico",pregunta:"¿Qué es una patente municipal?",alternativas:["Un impuesto que se paga al SII por iniciar actividades","Un certificado de zonificación del Ministerio de Vivienda","Una licencia de funcionamiento emitida por la SEREMI de Salud","El permiso necesario para emprender cualquier actividad comercial que necesita un local fijo, otorgado por la municipalidad"],correcta:3,retroalimentacion:"La patente municipal es el permiso necesario para emprender cualquier actividad comercial que requiera un local fijo. Es otorgada por la municipalidad del lugar donde se instalará el negocio y es específica para la actividad que se planea ejercer.",fuente:"Semana 12, Slide 3"},
+{id:12,tipo:"alternativa",bloque:2,nombreBloque:bloqueNames[1],dificultad:"Básico",pregunta:"¿Cuáles son los tipos de patentes municipales?",alternativas:["Comercial, profesional, industrial y de alcoholes","Nacional, regional, comunal y local","Permanente, temporal, estacional y eventual","Microempresa, pequeña, mediana y grande"],correcta:0,retroalimentacion:"Existen cuatro tipos principales de patentes municipales: comercial (tiendas y negocios de compraventa), profesional (consultas médicas, estudios de abogados), industrial (fábricas, panaderías) y de alcoholes (botillerías, bares, restaurantes).",fuente:"Semana 12, Slide 4"},
+{id:13,tipo:"alternativa",bloque:2,nombreBloque:bloqueNames[1],dificultad:"Intermedio",pregunta:"El costo anual de una patente municipal se calcula como un porcentaje del capital propio del negocio. ¿Cuál es el rango de ese porcentaje?",alternativas:["Entre el 1% y el 3% del capital propio","Un monto fijo de 5 UTM para todos los negocios","Entre el 10 por mil y el 20 por mil del capital propio","Entre el 2,5 por mil y el 5 por mil del capital propio"],correcta:3,retroalimentacion:"El monto a pagar por la patente municipal es entre el 2,5 por mil y el 5 por mil del capital propio del negocio declarado ante Impuestos Internos, con un mínimo de 1 UTM y un máximo de 8.000 UTM al año. El porcentaje exacto varía según la municipalidad.",fuente:"Semana 12, Slide 9"},
+{id:14,tipo:"alternativa",bloque:2,nombreBloque:bloqueNames[1],dificultad:"Intermedio",pregunta:"¿Qué rol cumple la Dirección de Obras de la Municipalidad en relación con la patente?",alternativas:["Otorga una autorización previa verificando que el local sea apto según el plan regulador comunal","Emite la resolución sanitaria del local","Cobra el valor de la patente al contribuyente","Registra la empresa en el SII"],correcta:0,retroalimentacion:"La Dirección de Obras debe inspeccionar el lugar y emitir un informe de factibilidad que indique que el local es apto para la actividad comercial. Su intervención asegura que el negocio no interfiera con el plan regulador de la comuna, evitando, por ejemplo, que se ejerza actividad comercial en una zona residencial.",fuente:"Semana 12, Slide 8"},
+{id:15,tipo:"alternativa",bloque:2,nombreBloque:bloqueNames[1],dificultad:"Básico",pregunta:"¿Cuál es la vigencia de una patente municipal?",alternativas:["Mensual","Semestral","Indefinida para todos los tipos","Anual"],correcta:3,retroalimentacion:"Las patentes municipales tienen vigencia anual y pueden pagarse en dos cuotas semestrales. La excepción son las patentes de profesionales independientes, que tienen vigencia indefinida y cuestan 1 UTM anual.",fuente:"Semana 12, Slide 10"},
+{id:16,tipo:"alternativa",bloque:2,nombreBloque:bloqueNames[1],dificultad:"Avanzado",pregunta:"Para solicitar una patente de alcoholes, además de los requisitos generales, se debe:",alternativas:["Inscribir la patente en el SAG, presentar certificado de antecedentes y obtener la aprobación del concejo municipal","Presentar solo la resolución sanitaria de la SEREMI de Salud","Obtener una autorización especial del Ministerio de Economía","Pagar un arancel adicional al SII equivalente al 10% del capital"],correcta:0,retroalimentacion:"La patente de alcoholes tiene requisitos adicionales específicos: debe inscribirse en el Servicio Agrícola y Ganadero (SAG), el solicitante debe presentar un certificado de antecedentes vigente, y además la patente debe ser aprobada por el concejo municipal. El precio de esta patente está fijado por la Ley de Alcoholes (entre 0,6 UTM y 3,5 UTM).",fuente:"Semana 12, Slide 7"},
+{id:17,tipo:"alternativa",bloque:2,nombreBloque:bloqueNames[1],dificultad:"Intermedio",pregunta:"Si un empresario tiene una patente comercial para una tienda de ropa y quiere vender además helados, ¿qué debe hacer?",alternativas:["Nada, la patente comercial lo cubre todo","Solicitar una ampliación de patente","Cerrar la tienda de ropa y abrir una nueva patente","Pedir una patente industrial adicional"],correcta:1,retroalimentacion:"Las patentes son específicas para la actividad que se planea ejercer. Si se quiere ampliar el giro del negocio (por ejemplo, de venta de ropa a incluir venta de helados), es necesario solicitar una ampliación de patente en la municipalidad.",fuente:"Semana 12, Slide 3"},
+{id:18,tipo:"alternativa",bloque:2,nombreBloque:bloqueNames[1],dificultad:"Intermedio",pregunta:"¿Qué autorización especial necesita un jardín infantil además de la patente municipal?",alternativas:["Autorización del Ministerio de Economía","Autorización de la JUNJI y del SEREMI de Salud correspondiente","Solo autorización del Ministerio de Educación","Solo resolución sanitaria del SAG"],correcta:1,retroalimentacion:"Los jardines infantiles requieren, además de la patente municipal, la autorización de la Junta Nacional de Jardines Infantiles (JUNJI) y del SEREMI de Salud correspondiente a la región.",fuente:"Semana 12, Slide 6"},
+{id:19,tipo:"alternativa",bloque:2,nombreBloque:bloqueNames[1],dificultad:"Avanzado",pregunta:"Si el capital propio de un negocio es de $80.000.000 y la municipalidad cobra el 5 por mil, ¿cuánto debe pagar anualmente por la patente?",alternativas:["$400.000","$4.000.000","$40.000","$800.000"],correcta:0,retroalimentacion:"El cálculo es: $80.000.000 × 0,005 (5 por mil) = $400.000 al año. Este monto se puede pagar en dos cuotas semestrales de $200.000 cada una. Se debe verificar que el resultado esté dentro del rango legal (mínimo 1 UTM, máximo 8.000 UTM).",fuente:"Semana 12, Slide 9"},
+{id:20,tipo:"alternativa",bloque:2,nombreBloque:bloqueNames[1],dificultad:"Básico",pregunta:"¿Qué documento debe acreditar el solicitante de una patente respecto del local donde operará?",alternativas:["Solo una declaración jurada simple","El título por el que ocupa el local: contrato de arriendo, certificado de dominio, etc.","Una póliza de seguro contra incendios","La tasación comercial del inmueble"],correcta:1,retroalimentacion:"Entre los documentos requeridos para obtener una patente municipal está el documento que acredite el título por el que se ocupa el local, como un contrato de arriendo o un certificado de dominio del inmueble.",fuente:"Semana 12, Slide 5"},
+// ===== BLOQUE 3: IMPUESTOS EN CHILE (10 alternativas) =====
+{id:21,tipo:"alternativa",bloque:3,nombreBloque:bloqueNames[2],dificultad:"Básico",pregunta:"¿Cuál de las siguientes es una característica de los impuestos en Chile?",alternativas:["Son voluntarios y dependen de la voluntad del contribuyente","Generan una contraprestación directa e inmediata al momento del pago","Están establecidos por ley y son obligatorios, sin contraprestación directa","Solo se aplican a las personas jurídicas"],correcta:2,retroalimentacion:"Los impuestos son obligaciones establecidas por ley cuyo fin es financiar el gasto público. No existe una contraprestación directa al momento del pago (no recibes un bien o servicio específico a cambio de pagar un impuesto), a diferencia de una tasa o un precio.",fuente:"Semana 13, Slide 6"},
+{id:22,tipo:"alternativa",bloque:3,nombreBloque:bloqueNames[2],dificultad:"Intermedio",pregunta:"¿Cuáles son los elementos esenciales de un impuesto?",alternativas:["Hecho gravado, base imponible, contribuyente, tasa y exenciones","Emisor, receptor, monto y plazo","Declaración, pago, fiscalización y sanción","Capital, renta, gasto y utilidad"],correcta:0,retroalimentacion:"Todo impuesto tiene cinco elementos esenciales: el hecho gravado (descripción del hecho que genera la obligación), la base imponible (cuantificación del hecho gravado), el contribuyente (quien debe pagar), la tasa (el porcentaje aplicable) y las exenciones (liberaciones de la obligación tributaria).",fuente:"Semana 13, Slide 7"},
+{id:23,tipo:"alternativa",bloque:3,nombreBloque:bloqueNames[2],dificultad:"Intermedio",pregunta:"El IVA (Impuesto al Valor Agregado) del 19% es un ejemplo de impuesto:",alternativas:["Directo y progresivo","Indirecto y de tasa fija","Directo y de tasa fija","Indirecto y progresivo"],correcta:1,retroalimentacion:"El IVA es un impuesto indirecto (se aplica sobre el consumo, no directamente sobre la renta del contribuyente) y de tasa fija (la tasa del 19% se mantiene invariable independientemente del valor del hecho gravado). No es progresivo porque no aumenta con mayores montos de compra.",fuente:"Semana 13, Slides 11 y 13"},
+{id:24,tipo:"alternativa",bloque:3,nombreBloque:bloqueNames[2],dificultad:"Avanzado",pregunta:"Según la Ley N° 21.210 vigente desde 2020, ¿cuál es la tasa de Impuesto de Primera Categoría (IDPC) del Régimen Pro Pyme General (Art. 14 letra D N°3)?",alternativas:["27%","25%","12,5%","17%"],correcta:2,retroalimentacion:"El Régimen Pro Pyme General (Art. 14D N°3 de la LIR) tiene una tasa de IDPC del 12,5%, significativamente menor que la del Régimen General (27%). Está diseñado para empresas con un promedio anual de ingresos de hasta 75.000 UF e incluye beneficios como la depreciación instantánea.",fuente:"Ley N° 21.210, actualización 2026"},
+{id:25,tipo:"alternativa",bloque:3,nombreBloque:bloqueNames[2],dificultad:"Avanzado",pregunta:"¿Qué característica tiene el Régimen Pro Pyme Transparente (Art. 14 letra D N°8)?",alternativas:["Tiene una tasa de IDPC del 12,5%","Solo admite empresas con ingresos superiores a 75.000 UF","La empresa queda liberada del IDPC y tributan directamente los dueños, quienes deben ser 100% personas naturales con domicilio en Chile","Aplica un crédito parcial del 65% del IDPC"],correcta:2,retroalimentacion:"En el Régimen Pro Pyme Transparente, la empresa queda completamente liberada del IDPC. La tributación ocurre directamente en los dueños (propietarios), quienes deben ser 100% personas naturales con domicilio o residencia en Chile. Es el régimen más simple para Pymes cuyos dueños cumplen esa condición.",fuente:"Ley N° 21.210, Art. 14D N°8 LIR"},
+{id:26,tipo:"alternativa",bloque:3,nombreBloque:bloqueNames[2],dificultad:"Básico",pregunta:"¿Cuál es el principio tributario que establece que no se podrá cobrar ningún impuesto que no esté contenido en la ley?",alternativas:["Equidad","Proporcionalidad","Progresividad","Legalidad"],correcta:3,retroalimentacion:"El principio de legalidad establece que ningún impuesto puede cobrarse si no está contenido en una ley. Es un principio fundamental del derecho tributario que protege a los contribuyentes de cobros arbitrarios.",fuente:"Semana 13, Slide 8"},
+{id:27,tipo:"alternativa",bloque:3,nombreBloque:bloqueNames[2],dificultad:"Intermedio",pregunta:"¿Cuál de los siguientes NO es un objetivo de los impuestos?",alternativas:["Corregir externalidades","Proveer bienes públicos","Redistribuir riqueza","Generar utilidades para los funcionarios del gobierno"],correcta:3,retroalimentacion:"Los tres objetivos fundamentales de los impuestos son: corregir externalidades (ej. impuesto a los cigarrillos), proveer bienes públicos (defensa, salud, educación) y redistribuir riqueza (financiar programas sociales). Los impuestos no tienen como objetivo generar utilidades personales para funcionarios.",fuente:"Semana 13, Slide 9"},
+{id:28,tipo:"alternativa",bloque:3,nombreBloque:bloqueNames[2],dificultad:"Avanzado",pregunta:"En el Régimen General (Art. 14 letra A, conocido como Semi Integrado) vigente en 2026, ¿cuál es el porcentaje del crédito por IDPC que los propietarios pueden imputar a sus impuestos finales?",alternativas:["100% del crédito","65% del crédito","50% del crédito","No tienen derecho a crédito"],correcta:1,retroalimentacion:"En el Régimen General (Semi Integrado), la tasa de IDPC es del 27% y los propietarios pueden imputar un crédito parcial del 65% del IDPC pagado por la empresa contra sus impuestos finales (Global Complementario o Adicional). La excepción es para residentes en países con convenio de doble tributación, donde el crédito puede ser del 100%.",fuente:"Ley N° 21.210, Art. 14A LIR"},
+{id:29,tipo:"alternativa",bloque:3,nombreBloque:bloqueNames[2],dificultad:"Intermedio",pregunta:"El cobro de impuestos a los cigarrillos por los problemas de salud que generan es un ejemplo de:",alternativas:["Redistribución de riqueza","Provisión de bienes públicos","Política monetaria expansiva","Corrección de externalidades"],correcta:3,retroalimentacion:"Cuando el costo social de un bien es diferente al costo privado (externalidad negativa), el gobierno interviene a través de impuestos para corregir esa diferencia. Los cigarrillos generan costos de salud que en su mayoría son cubiertos por el Estado, por lo que el impuesto busca que el precio refleje ese costo social.",fuente:"Semana 13, Slide 9"},
+{id:30,tipo:"alternativa",bloque:3,nombreBloque:bloqueNames[2],dificultad:"Intermedio",pregunta:"¿Cuál es el límite máximo de ingresos anuales promedio para acogerse al Régimen Pro Pyme General?",alternativas:["75.000 UF","100.000 UF","50.000 UF","25.000 UF"],correcta:0,retroalimentacion:"El Régimen Pro Pyme General (Art. 14D N°3 de la LIR) está disponible para empresas con un promedio anual de ingresos de hasta 75.000 UF. Sobre ese monto, la empresa debe acogerse al Régimen General (Art. 14A).",fuente:"Ley N° 21.210, actualización 2026"},
+// ===== BLOQUE 4: LIQUIDACIÓN DE SUELDO (10 alternativas) =====
+{id:31,tipo:"alternativa",bloque:4,nombreBloque:bloqueNames[3],dificultad:"Básico",pregunta:"Según el Art. 41 del Código del Trabajo, ¿qué se entiende por remuneración?",alternativas:["Todo pago que el empleador realice al trabajador, sin excepción","Las contraprestaciones en dinero y las adicionales en especie avaluables en dinero que debe percibir el trabajador del empleador por causa del contrato de trabajo","Solo el sueldo base mensual pactado en el contrato","Las utilidades que el trabajador genera para la empresa"],correcta:1,retroalimentacion:"La definición legal de remuneración es precisa: son las contraprestaciones en dinero y las adicionales en especie avaluables en dinero que percibe el trabajador del empleador por causa del contrato de trabajo. Es fundamental que exista un contrato de trabajo; sin él, el estipendio no puede calificarse como remuneración.",fuente:"Art. 41 Código del Trabajo"},
+{id:32,tipo:"alternativa",bloque:4,nombreBloque:bloqueNames[3],dificultad:"Intermedio",pregunta:"¿Cuál de los siguientes conceptos NO constituye remuneración según la legislación chilena?",alternativas:["Sueldo base","Comisión por ventas","Gratificación legal","Asignación de colación"],correcta:3,retroalimentacion:"La asignación de colación no constituye remuneración según la ley. Tampoco lo son la movilización, los viáticos, la pérdida de caja, la asignación familiar ni las indemnizaciones por término de contrato. Estos conceptos tienen en común que no son una contraprestación directa del trabajo sino beneficios legales o concesiones del empleador.",fuente:"Art. 41 Código del Trabajo, Semana 14a Slide 5"},
+{id:33,tipo:"alternativa",bloque:4,nombreBloque:bloqueNames[3],dificultad:"Avanzado",pregunta:"Un trabajador tiene un sueldo base de $600.000 mensuales. Considerando la jornada ordinaria de 42 horas semanales vigente en 2026 (Ley N° 21.561), ¿cuál es el valor de su hora extraordinaria?",alternativas:["$4.667","$5.000","$3.111","$7.000"],correcta:1,retroalimentacion:"Con la jornada de 42 horas semanales (vigente desde abril 2026), se adapta la fórmula clásica: el divisor pasa de 180 (para 45 hrs) a 168 (para 42 hrs). Cálculo: Valor hora ordinaria = ($600.000 ÷ 30) × 28 ÷ 168 = $20.000 × 28 ÷ 168 = $560.000 ÷ 168 = $3.333. Hora extraordinaria = $3.333 × 1,5 = $5.000. Se recomienda verificar el factor exacto en dt.gob.cl antes de aplicar la fórmula en una liquidación real.",fuente:"Ley N° 21.561, Semana 14a Slides 9-10"},
+{id:34,tipo:"alternativa",bloque:4,nombreBloque:bloqueNames[3],dificultad:"Intermedio",pregunta:"¿Qué porcentaje de la renta imponible se destina a la cotización obligatoria de AFP?",alternativas:["10%","12,5%","7%","0,6%"],correcta:0,retroalimentacion:"La cotización obligatoria de AFP es el 10% de la renta imponible, que va directamente a la cuenta individual del trabajador para su fondo de pensiones. A este 10% se le suma la comisión variable que cobra cada AFP (que varía entre 0,46% y 1,45% en 2026). El 7% corresponde a salud y el 0,6% al seguro de cesantía.",fuente:"Semana 14a, Slide 6"},
+{id:35,tipo:"alternativa",bloque:4,nombreBloque:bloqueNames[3],dificultad:"Básico",pregunta:"Si un trabajador tiene un sueldo base mensual de $450.000, ¿cuál es el valor de su día de trabajo para efectos de descuentos por ausencias?",alternativas:["$20.000","$18.000","$15.000","$16.071"],correcta:2,retroalimentacion:"Para calcular el descuento por un día no laborado, se divide la remuneración fija mensual por 30, independientemente de cuántos días tenga el mes. Así: $450.000 ÷ 30 = $15.000 por día.",fuente:"Semana 14a, Slide 8"},
+{id:36,tipo:"alternativa",bloque:4,nombreBloque:bloqueNames[3],dificultad:"Avanzado",pregunta:"Un trabajador tiene una remuneración imponible de $800.000. La gratificación legal se paga como el 25% de la remuneración imponible. Si el sueldo mínimo vigente en 2026 es de $539.000, ¿cuánto recibe efectivamente por gratificación?",alternativas:["$200.000","$213.354","$134.750","$539.000"],correcta:0,retroalimentacion:"Paso 1: Gratificación calculada = $800.000 × 0,25 = $200.000. Paso 2: Tope máximo legal = $539.000 × 4,75 = $2.560.250 anuales ÷ 12 = $213.354 mensuales. Paso 3: Como la gratificación calculada ($200.000) NO supera el tope mensual ($213.354), el trabajador recibe los $200.000 completos. El tope solo aplica cuando el 25% supera el máximo legal.",fuente:"Art. 50 Código del Trabajo, sueldo mínimo 2026"},
+{id:37,tipo:"alternativa",bloque:4,nombreBloque:bloqueNames[3],dificultad:"Intermedio",pregunta:"El Seguro de Invalidez y Sobrevivencia (SIS) es de cargo de:",alternativas:["El trabajador, como parte de sus cotizaciones previsionales","La AFP que administra los fondos del trabajador","Se divide 50% entre trabajador y empleador","El empleador, desde el 1 de julio de 2009"],correcta:3,retroalimentacion:"Desde el 1 de julio de 2009, el SIS (Seguro de Invalidez y Sobrevivencia) es 100% de cargo del empleador. Antes de esa fecha era de cargo del trabajador. En 2026, la tasa del SIS es de aproximadamente 1,62% de las remuneraciones imponibles.",fuente:"Semana 14a, Slide 7 — actualización 2026"},
+{id:38,tipo:"alternativa",bloque:4,nombreBloque:bloqueNames[3],dificultad:"Intermedio",pregunta:"El Impuesto Único de Segunda Categoría (IUSC) se aplica sobre:",alternativas:["La remuneración bruta total del trabajador","La renta tributable, que es la remuneración imponible menos las cotizaciones previsionales","Solo el sueldo base, sin considerar bonos ni horas extras","El total de haberes no imponibles"],correcta:1,retroalimentacion:"El IUSC se aplica sobre la renta tributable, que se obtiene restando las cotizaciones previsionales (AFP, salud, AFC) de la remuneración imponible. Es decir: Renta tributable = Remuneración imponible – Cotización AFP – Cotización Salud – Cotización Seguro de Cesantía. El impuesto es progresivo, con tramo exento hasta 13,5 UTM mensuales.",fuente:"Semana 14a, Slides 18-19"},
+{id:39,tipo:"alternativa",bloque:4,nombreBloque:bloqueNames[3],dificultad:"Básico",pregunta:"¿Cuál es el recargo legal mínimo que debe aplicarse sobre el valor de la hora ordinaria para calcular el valor de la hora extraordinaria?",alternativas:["25%","100%","75%","50%"],correcta:3,retroalimentacion:"El valor de la hora extraordinaria se calcula con un recargo mínimo del 50% sobre el valor de la hora ordinaria. Es decir, la hora extra vale al menos 1,5 veces la hora ordinaria. Si el contrato establece un recargo superior, se aplica el pactado.",fuente:"Art. 32 Código del Trabajo, Semana 14a Slide 10"},
+{id:40,tipo:"alternativa",bloque:4,nombreBloque:bloqueNames[3],dificultad:"Intermedio",pregunta:"¿Cuál de los siguientes aportes previsionales del seguro de cesantía es de cargo del trabajador con contrato indefinido?",alternativas:["2,8% de la renta imponible","1,6% de la renta imponible","0,6% de la renta imponible","El trabajador no aporta al seguro de cesantía"],correcta:2,retroalimentacion:"En el caso de un trabajador con contrato a plazo indefinido, el aporte al seguro de cesantía se distribuye así: 0,6% de cargo del trabajador y 1,6% de cargo del empleador (total 2,2%). En contratos a plazo fijo o por obra, el trabajador no aporta y el empleador paga el 3% completo.",fuente:"Semana 14a, Slide 7"},
+// ===== BLOQUE 5: PREVIRED (10 alternativas) =====
+{id:41,tipo:"alternativa",bloque:5,nombreBloque:bloqueNames[4],dificultad:"Básico",pregunta:"¿Qué es Previred?",alternativas:["Una AFP del sistema previsional chileno","Un servicio de declaración y pago de cotizaciones previsionales por Internet","Un organismo estatal que fiscaliza las AFP","Una mutual de seguridad para accidentes laborales"],correcta:1,retroalimentacion:"Previred es un servicio en línea que permite declarar y pagar todas las cotizaciones previsionales de los empleados en un solo lugar (AFP, Isapres, Fonasa, Mutuales, AFC, etc.), de forma gratuita para el usuario. Cuenta con el respaldo y certificación de la Dirección del Trabajo.",fuente:"Semana 14c, Slides 3-5"},
+{id:42,tipo:"alternativa",bloque:5,nombreBloque:bloqueNames[4],dificultad:"Intermedio",pregunta:"¿Cuántas AFP existen en el sistema previsional chileno en 2026?",alternativas:["5 AFP","6 AFP","8 AFP","7 AFP"],correcta:3,retroalimentacion:"En 2026, el sistema de AFP en Chile está compuesto por 7 administradoras: Capital, Cuprum, Habitat, Modelo, PlanVital, Provida y Uno. AFP Modelo se incorporó en 2019 y AFP Uno se posicionó como la de menor comisión del mercado.",fuente:"Actualización 2026, Superintendencia de Pensiones"},
+{id:43,tipo:"alternativa",bloque:5,nombreBloque:bloqueNames[4],dificultad:"Intermedio",pregunta:"¿Cuál es la AFP con la comisión más baja del sistema en 2026?",alternativas:["AFP Uno (0,46%)","AFP PlanVital (1,16%)","AFP Modelo (0,58%)","AFP Habitat (1,27%)"],correcta:0,retroalimentacion:"AFP Uno tiene la comisión más baja del sistema en 2026, con un 0,46% de la renta imponible. Le sigue AFP Modelo con 0,58%. En el extremo opuesto, AFP Provida tiene la comisión más alta con 1,45%. Esta comisión se suma al 10% de cotización obligatoria.",fuente:"Superintendencia de Pensiones 2026"},
+{id:44,tipo:"alternativa",bloque:5,nombreBloque:bloqueNames[4],dificultad:"Intermedio",pregunta:"¿Cuál es el tope imponible para cotizaciones de AFP y Salud en 2026?",alternativas:["75 UF","120 UF","135,2 UF","90 UF"],correcta:3,retroalimentacion:"El tope imponible para cotizaciones de AFP, Salud y Ley de Accidentes del Trabajo en 2026 es de 90,0 UF (ajustado desde febrero 2026). El tope para el Seguro de Cesantía (AFC) es diferente: 135,2 UF. Estos topes se actualizan en pesos cada mes según el valor de la UF.",fuente:"Superintendencia de Pensiones, Previred 2026"},
+{id:45,tipo:"alternativa",bloque:5,nombreBloque:bloqueNames[4],dificultad:"Básico",pregunta:"¿Cuál es el sueldo mínimo mensual para trabajadores entre 18 y 65 años vigente en 2026?",alternativas:["$500.000","$460.000","$539.000","$600.000"],correcta:2,retroalimentacion:"El ingreso mínimo mensual (IMM) para trabajadores entre 18 y 65 años es de $539.000 desde el 1 de enero de 2026, establecido por la Ley N° 21.751. Para menores de 18 y mayores de 65 años es de $402.082.",fuente:"Ley N° 21.751, actualización 2026"},
+{id:46,tipo:"alternativa",bloque:5,nombreBloque:bloqueNames[4],dificultad:"Intermedio",pregunta:"¿Hasta qué día del mes siguiente se extiende el plazo de pago de cotizaciones previsionales cuando se realiza a través de Previred?",alternativas:["Día 13","Día 15","Día 10","Día 5"],correcta:0,retroalimentacion:"El plazo legal general para pagar cotizaciones es hasta el día 10 del mes siguiente al devengamiento de las remuneraciones. Sin embargo, cuando la declaración y pago se realiza por Internet a través de Previred, el plazo se extiende hasta el día 13.",fuente:"Semana 14a Slide 13 y actualización 2026"},
+{id:47,tipo:"alternativa",bloque:5,nombreBloque:bloqueNames[4],dificultad:"Avanzado",pregunta:"Si un trabajador tiene una renta imponible de $4.000.000 en junio de 2026 y el tope imponible es de 90 UF (UF ≈ $38.000 al día 30 de junio), ¿sobre qué monto se calculan sus cotizaciones de AFP y salud?",alternativas:["$4.000.000","$3.420.000","$5.130.000","Solo sobre el sueldo mínimo"],correcta:1,retroalimentacion:"Tope imponible en pesos ≈ 90 UF × $38.000 = $3.420.000 (valor referencial). Como la renta imponible del trabajador ($4.000.000) supera el tope, las cotizaciones de AFP y salud se calculan solo sobre el tope de $3.420.000, no sobre el total. La diferencia no está sujeta a cotización previsional.",fuente:"Superintendencia de Pensiones, topes imponibles 2026"},
+{id:48,tipo:"alternativa",bloque:5,nombreBloque:bloqueNames[4],dificultad:"Básico",pregunta:"¿Cuál de las siguientes instituciones NO se puede pagar a través de Previred?",alternativas:["AFP","ISAPRE","Servicio de Impuestos Internos (SII)","Mutual de Seguridad"],correcta:2,retroalimentacion:"Previred permite pagar cotizaciones de AFP, Isapres, Fonasa, Mutuales de Seguridad, Cajas de Compensación, AFC (Seguro de Cesantía), IPS (ex INP), APV y otras entidades previsionales. El SII (impuestos) no se paga a través de Previred sino directamente en sii.cl o en instituciones recaudadoras de impuestos.",fuente:"Semana 14c, Slide 5"},
+{id:49,tipo:"alternativa",bloque:5,nombreBloque:bloqueNames[4],dificultad:"Avanzado",pregunta:"¿Cuál es la tasa del Seguro de Invalidez y Sobrevivencia (SIS) de cargo del empleador vigente desde abril de 2026?",alternativas:["1,54%","1,49%","1,62%","2,00%"],correcta:2,retroalimentacion:"La tasa del SIS para empleadores (trabajadores dependientes) fue ajustada a 1,62% de las remuneraciones imponibles desde abril de 2026. Para trabajadores independientes que cotizan vía retención de boletas de honorarios, la tasa SIS es de 1,49% para el año tributario 2026.",fuente:"Superintendencia de Pensiones 2026"},
+{id:50,tipo:"alternativa",bloque:5,nombreBloque:bloqueNames[4],dificultad:"Intermedio",pregunta:"¿Cuál es la AFP con la comisión más alta del sistema en 2026?",alternativas:["AFP Capital (1,44%)","AFP Cuprum (1,44%)","AFP Provida (1,45%)","AFP Habitat (1,27%)"],correcta:2,retroalimentacion:"AFP Provida tiene la comisión más alta del sistema en 2026 con un 1,45% de la renta imponible. Le siguen AFP Capital y AFP Cuprum, ambas con 1,44%. La diferencia entre la AFP más cara (Provida, 1,45%) y la más barata (Uno, 0,46%) es de casi 1 punto porcentual.",fuente:"Superintendencia de Pensiones 2026"},
+// ===== BLOQUE 6: DECLARACIONES JURADAS (10 alternativas) =====
+{id:51,tipo:"alternativa",bloque:6,nombreBloque:bloqueNames[5],dificultad:"Básico",pregunta:"¿Qué información se declara en la Declaración Jurada N° 1887?",alternativas:["Las retenciones por honorarios a trabajadores independientes","Las rentas del trabajo dependiente (sueldos) y el Impuesto Único de Segunda Categoría retenido","Los impuestos indirectos pagados por la empresa","Las utilidades distribuidas a los accionistas"],correcta:1,retroalimentacion:"La DJ 1887 informa al SII las rentas del trabajo dependiente (sueldos, remuneraciones accesorias) y el Impuesto Único de Segunda Categoría (IUSC) retenido durante el año comercial anterior. Es una obligación del empleador.",fuente:"Semana 15, Slides 2-3"},
+{id:52,tipo:"alternativa",bloque:6,nombreBloque:bloqueNames[5],dificultad:"Básico",pregunta:"¿Qué información se declara en la Declaración Jurada N° 1879?",alternativas:["Las rentas del trabajo dependiente","Las retenciones de honorarios a trabajadores independientes y remuneraciones de directores de S.A.","Los dividendos pagados a accionistas","El IVA recaudado mensualmente"],correcta:1,retroalimentacion:"La DJ 1879 informa las retenciones de honorarios efectuadas a trabajadores independientes (boletas de honorarios) y las retenciones a remuneraciones de directores de sociedades anónimas.",fuente:"Semana 15, Slide 17"},
+{id:53,tipo:"alternativa",bloque:6,nombreBloque:bloqueNames[5],dificultad:"Intermedio",pregunta:"¿Cuál es la tasa de retención de boletas de honorarios vigente en 2026?",alternativas:["10,75%","13%","15,25%","17%"],correcta:2,retroalimentacion:"La tasa de retención de boletas de honorarios en 2026 es del 15,25%, según el cronograma de alza gradual establecido por la Ley N° 21.133. Esta tasa era de 10,75% en 2020 y seguirá subiendo: 16% en 2027 y 17% en 2028 (meta final).",fuente:"Ley N° 21.133, actualización 2026"},
+{id:54,tipo:"alternativa",bloque:6,nombreBloque:bloqueNames[5],dificultad:"Intermedio",pregunta:"¿Cuál fue el plazo de presentación de las DJ 1887 y 1879 para el Año Tributario 2026?",alternativas:["31 de enero de 2026","15 de abril de 2026","27 de marzo de 2026","30 de junio de 2026"],correcta:2,retroalimentacion:"El plazo de presentación de las DJ 1887 y 1879 para el Año Tributario 2026 (sobre rentas del año comercial 2025) fue el 27 de marzo de 2026, según la Resolución Exenta SII N° 123 del 25 de septiembre de 2025.",fuente:"Resolución Exenta SII N° 123/2025"},
+{id:55,tipo:"alternativa",bloque:6,nombreBloque:bloqueNames[5],dificultad:"Avanzado",pregunta:"Si una empresa recibe una boleta de honorarios bruta de $500.000 en 2026, ¿cuánto debe retener?",alternativas:["$53.750","$76.250","$85.000","$50.000"],correcta:1,retroalimentacion:"Con la tasa de retención 2026 del 15,25%: Retención = $500.000 × 0,1525 = $76.250. En 2020, la misma boleta habría generado una retención de solo $53.750 (10,75%). Este aumento gradual financia las cotizaciones previsionales de los trabajadores independientes.",fuente:"Ley N° 21.133"},
+{id:56,tipo:"alternativa",bloque:6,nombreBloque:bloqueNames[5],dificultad:"Intermedio",pregunta:"Cuando se detecta una inconsistencia entre la DJ 1887 y el Formulario N° 29 mensual, ¿qué código de observación se genera?",alternativas:["R07","R08","R12","R01"],correcta:0,retroalimentacion:"El código R07 se genera cuando la inconsistencia nace de la cuadratura entre la DJ 1887 y el Formulario N° 29 (específicamente el código 48 de retención del IUSC). El código R08 corresponde a la inconsistencia entre la DJ 1879 y el F29.",fuente:"Semana 15, Slide 16"},
+{id:57,tipo:"alternativa",bloque:6,nombreBloque:bloqueNames[5],dificultad:"Intermedio",pregunta:"En la DJ 1887, la sigla 'C' como tipo de trabajador indica:",alternativas:["Trabajador agrícola con jornada completa","Trabajador no agrícola con jornada de trabajo parcial","Trabajador contratado por obra o faena","Trabajador no agrícola con jornada de trabajo completa"],correcta:3,retroalimentacion:"Los códigos de tipo de trabajador en la DJ 1887 son: A (agrícola jornada completa), B (agrícola jornada parcial), C (no agrícola jornada completa), P (no agrícola jornada parcial), G (autoridad de gobierno) y S (senadores y diputados).",fuente:"Semana 15, Slide 10"},
+{id:58,tipo:"alternativa",bloque:6,nombreBloque:bloqueNames[5],dificultad:"Avanzado",pregunta:"¿Qué información debe incluirse en la columna 'Leyes Sociales' de la DJ 1887?",alternativas:["Solo las cotizaciones de cargo del trabajador","Solo las cotizaciones de cargo del empleador","Las cotizaciones previsionales obligatorias y voluntarias que hayan rebajado la Renta Neta Pagada o sean de cargo del empleador, no informadas en otras columnas","Solo el Impuesto Único de Segunda Categoría retenido"],correcta:2,retroalimentacion:"La columna 'Leyes Sociales' incluye cotizaciones previsionales y de salud, seguros de invalidez, seguros complementarios, desempleo, mutuales y cualquier otra suma en beneficio del trabajador vinculada a leyes sociales, tanto de cargo del trabajador como del empleador. Esta información se usa para generar datos de egresos de empresas Pro Pyme.",fuente:"Semana 15, Slide 12"},
+{id:59,tipo:"alternativa",bloque:6,nombreBloque:bloqueNames[5],dificultad:"Intermedio",pregunta:"¿Con qué código del Formulario N° 29 se realiza la cuadratura de la DJ 1879?",alternativas:["Código 48","Código 89","Código 151","Código 200"],correcta:2,retroalimentacion:"La cuadratura de la DJ 1879 se realiza con el código 151 del Formulario N° 29 (Línea 61: Retención de Impuesto sobre las rentas del Art. 42 N°2). Si hay diferencias se genera la observación R08. El código 48 corresponde a la cuadratura de la DJ 1887 (IUSC retenido).",fuente:"Semana 15, Slide 23"},
+{id:60,tipo:"alternativa",bloque:6,nombreBloque:bloqueNames[5],dificultad:"Básico",pregunta:"¿Cuántas secciones tienen las Declaraciones Juradas 1887 y 1879?",alternativas:["2 secciones","4 secciones","5 secciones","3 secciones: Identificación del Declarante, Datos de los Informados y Cuadro de Resumen"],correcta:3,retroalimentacion:"Ambas declaraciones juradas (1887 y 1879) están compuestas por 3 secciones: Sección A (Identificación del Declarante), Sección B (Datos de los Informados) y Sección C (Cuadro de Resumen).",fuente:"Semana 15, Slides 3 y 17"},
+// ===== VERDADERO/FALSO (30 preguntas) =====
+{id:61,tipo:"vf",bloque:1,nombreBloque:bloqueNames[0],dificultad:"Básico",pregunta:"Una EIRL puede tener más de un socio.",esVerdadero:false,retroalimentacion:"Falso. La EIRL (Empresa Individual de Responsabilidad Limitada) es, por definición, una empresa de un solo titular. No tiene socios. El administrador es el titular, quien representa a la empresa con todas las facultades de administración y decisión.",fuente:"Semana 11, Slide 12"},
+{id:62,tipo:"vf",bloque:1,nombreBloque:bloqueNames[0],dificultad:"Intermedio",pregunta:"Una Sociedad por Acciones (SpA) tributa como una Sociedad de Responsabilidad Limitada (SRL).",esVerdadero:false,retroalimentacion:"Falso. La SpA tributa como una Sociedad Anónima (S.A.), no como una SRL. Este es un dato relevante al elegir el tipo societario, ya que la tributación como S.A. tiene implicancias específicas en términos de régimen tributario aplicable.",fuente:"Semana 11, Slide 16"},
+{id:63,tipo:"vf",bloque:1,nombreBloque:bloqueNames[0],dificultad:"Intermedio",pregunta:"En una Sociedad de Responsabilidad Limitada, la muerte de uno de los socios disuelve automáticamente la sociedad.",esVerdadero:false,retroalimentacion:"Falso. En las SRL, la muerte de uno de los socios NO disuelve la sociedad automáticamente. La sociedad continúa con los herederos del socio fallecido, salvo que expresamente se acuerde en el estatuto que la muerte de un socio disolverá la sociedad.",fuente:"Semana 11, Slide 13"},
+{id:64,tipo:"vf",bloque:1,nombreBloque:bloqueNames[0],dificultad:"Básico",pregunta:"La Comisión para el Mercado Financiero (CMF) fiscaliza las Sociedades Anónimas Abiertas en Chile.",esVerdadero:true,retroalimentacion:"Verdadero. Desde 2017, la CMF reemplazó a la antigua Superintendencia de Valores y Seguros (SVS) en la función de fiscalización de las sociedades anónimas abiertas y el mercado de valores.",fuente:"Semana 11, Slide 15"},
+{id:65,tipo:"vf",bloque:1,nombreBloque:bloqueNames[0],dificultad:"Intermedio",pregunta:"Una empresa de persona natural tiene un RUT distinto al de su dueño.",esVerdadero:false,retroalimentacion:"Falso. Una empresa de persona natural funciona con el mismo RUT de la persona natural que la opera. Solo las empresas con personalidad jurídica (EIRL, SRL, S.A., SpA) tienen un RUT propio diferente al de sus dueños.",fuente:"Semana 11, Slide 10"},
+{id:66,tipo:"vf",bloque:2,nombreBloque:bloqueNames[1],dificultad:"Básico",pregunta:"La patente de profesionales independientes tiene vigencia indefinida y cuesta 1 UTM anual.",esVerdadero:true,retroalimentacion:"Verdadero. A diferencia de las demás patentes (que tienen vigencia anual), la patente de profesionales independientes tiene vigencia indefinida, aunque se paga anualmente por un valor de 1 UTM, con posibilidad de pagar en dos cuotas semestrales.",fuente:"Semana 12, Slide 10"},
+{id:67,tipo:"vf",bloque:2,nombreBloque:bloqueNames[1],dificultad:"Intermedio",pregunta:"Las patentes de alcoholes tienen un costo que se calcula como porcentaje del capital propio del negocio, igual que las patentes comerciales.",esVerdadero:false,retroalimentacion:"Falso. Las patentes de alcoholes tienen un precio fijado por la Ley de Alcoholes, que varía entre 0,6 UTM y 3,5 UTM según la naturaleza del local. No se calculan como porcentaje del capital propio, a diferencia de las patentes comerciales (entre 2,5‰ y 5‰ del capital propio).",fuente:"Semana 12, Slide 9"},
+{id:68,tipo:"vf",bloque:2,nombreBloque:bloqueNames[1],dificultad:"Básico",pregunta:"Se puede instalar cualquier tipo de negocio en cualquier zona geográfica de la comuna sin restricciones.",esVerdadero:false,retroalimentacion:"Falso. La Dirección de Obras de la Municipalidad debe verificar que el local comercial no interfiera con el plan regulador de la comuna. Por ejemplo, no se puede ejercer una actividad comercial o industrial en una zona destinada exclusivamente a uso residencial.",fuente:"Semana 12, Slide 8"},
+{id:69,tipo:"vf",bloque:2,nombreBloque:bloqueNames[1],dificultad:"Intermedio",pregunta:"El pago anual de la patente municipal puede suspenderse si el negocio tiene deudas o no ha obtenido ganancias.",esVerdadero:false,retroalimentacion:"Falso. El pago anual de la patente debe hacerse obligatoriamente para que el negocio siga funcionando. No se puede usar como excusa el tener deudas o no haber obtenido ganancias.",fuente:"Semana 12, Slide 9"},
+{id:70,tipo:"vf",bloque:2,nombreBloque:bloqueNames[1],dificultad:"Básico",pregunta:"Para obtener una patente industrial de panadería se requiere, además de los requisitos generales, una resolución de higiene y seguridad industrial del Servicio de Salud.",esVerdadero:true,retroalimentacion:"Verdadero. Para solicitar una patente industrial (incluyendo panaderías) se debe presentar una resolución de higiene y seguridad industrial del Servicio de Salud correspondiente a la región.",fuente:"Semana 12, Slide 7"},
+{id:71,tipo:"vf",bloque:3,nombreBloque:bloqueNames[2],dificultad:"Básico",pregunta:"El IVA es un impuesto directo.",esVerdadero:false,retroalimentacion:"Falso. El IVA (Impuesto al Valor Agregado) es un impuesto indirecto, ya que se aplica sobre el consumo de bienes y servicios, no directamente sobre la renta o patrimonio del contribuyente. Es el consumidor final quien efectivamente asume la carga económica del impuesto.",fuente:"Semana 13, Slide 11"},
+{id:72,tipo:"vf",bloque:3,nombreBloque:bloqueNames[2],dificultad:"Avanzado",pregunta:"El Régimen Pro Pyme General tiene una tasa de IDPC del 27%.",esVerdadero:false,retroalimentacion:"Falso. La tasa del IDPC del Régimen Pro Pyme General (Art. 14D N°3) es del 12,5%, no del 27%. La tasa del 27% corresponde al Régimen General (Art. 14A), también conocido como Semi Integrado, para empresas de mayor tamaño.",fuente:"Ley N° 21.210"},
+{id:73,tipo:"vf",bloque:3,nombreBloque:bloqueNames[2],dificultad:"Avanzado",pregunta:"El Régimen de Renta Atribuida (Art. 14A antiguo) sigue vigente en Chile en 2026.",esVerdadero:false,retroalimentacion:"Falso. El Régimen de Renta Atribuida (antiguo Art. 14A) fue derogado y reemplazado por la Ley N° 21.210 de Modernización Tributaria, vigente desde el 1 de enero de 2020. Los regímenes vigentes en 2026 son: Pro Pyme General, Pro Pyme Transparente, Régimen General (Semi Integrado) y Renta Presunta.",fuente:"Ley N° 21.210"},
+{id:74,tipo:"vf",bloque:3,nombreBloque:bloqueNames[2],dificultad:"Intermedio",pregunta:"En el Régimen Pro Pyme Transparente, la empresa paga el IDPC y los dueños no pagan impuestos adicionales.",esVerdadero:false,retroalimentacion:"Falso. Es exactamente al revés: en el Régimen Pro Pyme Transparente, la empresa queda liberada del IDPC y son los dueños (que deben ser 100% personas naturales con domicilio en Chile) quienes tributan directamente con sus impuestos personales (Global Complementario).",fuente:"Ley N° 21.210, Art. 14D N°8"},
+{id:75,tipo:"vf",bloque:3,nombreBloque:bloqueNames[2],dificultad:"Intermedio",pregunta:"Los impuestos tienen como fin principal satisfacer los egresos del fisco.",esVerdadero:true,retroalimentacion:"Verdadero. El objetivo principal de los impuestos es financiar el gasto público, que incluye el funcionamiento del Poder Ejecutivo, los Ministerios, los Servicios y Organismos Públicos, el Poder Legislativo, el Poder Judicial, entre otros.",fuente:"Semana 13, Slides 5-6"},
+{id:76,tipo:"vf",bloque:4,nombreBloque:bloqueNames[3],dificultad:"Básico",pregunta:"La asignación de colación es parte de la remuneración según la legislación chilena.",esVerdadero:false,retroalimentacion:"Falso. La asignación de colación no constituye remuneración según la ley. Al igual que la movilización, los viáticos y la asignación familiar, son pagos que no representan una contraprestación directa del trabajo sino beneficios legales o concesiones del empleador.",fuente:"Art. 41 Código del Trabajo"},
+{id:77,tipo:"vf",bloque:4,nombreBloque:bloqueNames[3],dificultad:"Intermedio",pregunta:"La hora extraordinaria de trabajo debe pagarse con un recargo mínimo del 100% sobre el valor de la hora ordinaria.",esVerdadero:false,retroalimentacion:"Falso. El recargo legal mínimo para la hora extraordinaria es del 50% sobre el valor de la hora ordinaria (es decir, se multiplica por 1,5). Un recargo del 100% significaría pagar el doble de la hora ordinaria, lo cual no es lo que establece la ley como mínimo.",fuente:"Art. 32 Código del Trabajo"},
+{id:78,tipo:"vf",bloque:4,nombreBloque:bloqueNames[3],dificultad:"Avanzado",pregunta:"La jornada laboral ordinaria vigente en Chile desde abril de 2026 es de 45 horas semanales.",esVerdadero:false,retroalimentacion:"Falso. La Ley N° 21.561 ('Ley de 40 horas') reduce gradualmente la jornada ordinaria. Desde el 26 de abril de 2026, la jornada ordinaria vigente es de 42 horas semanales (en transición hacia las 40 horas en 2028). Los 45 horas corresponden a la jornada antigua.",fuente:"Ley N° 21.561"},
+{id:79,tipo:"vf",bloque:4,nombreBloque:bloqueNames[3],dificultad:"Intermedio",pregunta:"El Seguro de Invalidez y Sobrevivencia (SIS) es de cargo del trabajador.",esVerdadero:false,retroalimentacion:"Falso. Desde el 1 de julio de 2009, el SIS es 100% de cargo del empleador. Antes de esa fecha era parte de las cotizaciones del trabajador, pero la ley trasladó gradualmente esta obligación al empleador.",fuente:"Semana 14a, Slide 7"},
+{id:80,tipo:"vf",bloque:4,nombreBloque:bloqueNames[3],dificultad:"Básico",pregunta:"La cotización obligatoria de AFP corresponde al 10% de la renta imponible del trabajador.",esVerdadero:true,retroalimentacion:"Verdadero. La cotización obligatoria de AFP es del 10% de la renta imponible, destinada íntegramente a la cuenta individual del trabajador. A este porcentaje se suma la comisión que cobra cada AFP (variable entre 0,46% y 1,45% en 2026).",fuente:"Semana 14a, Slide 6"},
+{id:81,tipo:"vf",bloque:5,nombreBloque:bloqueNames[4],dificultad:"Básico",pregunta:"Previred es un servicio gratuito para el usuario.",esVerdadero:true,retroalimentacion:"Verdadero. Previred es totalmente gratuito para el usuario (empleador, empleador de casa particular, trabajador independiente). No requiere software especial y se puede acceder desde cualquier computador conectado a Internet.",fuente:"Semana 14c, Slide 4"},
+{id:82,tipo:"vf",bloque:5,nombreBloque:bloqueNames[4],dificultad:"Intermedio",pregunta:"En 2026 existen 5 AFP en el sistema previsional chileno.",esVerdadero:false,retroalimentacion:"Falso. En 2026 existen 7 AFP en el sistema: Capital, Cuprum, Habitat, Modelo, PlanVital, Provida y Uno. El material original solo mencionaba 5 porque AFP Modelo y AFP Uno se incorporaron posteriormente.",fuente:"Superintendencia de Pensiones 2026"},
+{id:83,tipo:"vf",bloque:5,nombreBloque:bloqueNames[4],dificultad:"Intermedio",pregunta:"El tope imponible para cotizaciones de AFP y para el Seguro de Cesantía (AFC) es el mismo en 2026.",esVerdadero:false,retroalimentacion:"Falso. Son diferentes: el tope para AFP, Salud y Accidentes del Trabajo es de 90,0 UF, mientras que el tope para el Seguro de Cesantía (AFC) es de 135,2 UF (desde febrero de 2026). El tope AFC es mayor.",fuente:"Superintendencia de Pensiones, AFC Chile 2026"},
+{id:84,tipo:"vf",bloque:5,nombreBloque:bloqueNames[4],dificultad:"Avanzado",pregunta:"El plazo para pagar cotizaciones previsionales a través de Previred vence el día 10 del mes siguiente.",esVerdadero:false,retroalimentacion:"Falso. El plazo legal general es hasta el día 10, pero cuando se paga por Internet a través de Previred, el plazo se extiende hasta el día 13 del mes siguiente. Si alguno de estos días cae en sábado, domingo o festivo, se prorroga al primer día hábil siguiente.",fuente:"Actualización 2026"},
+{id:85,tipo:"vf",bloque:5,nombreBloque:bloqueNames[4],dificultad:"Intermedio",pregunta:"AFP Uno es la administradora con la comisión más baja del sistema en 2026, con un 0,46%.",esVerdadero:true,retroalimentacion:"Verdadero. AFP Uno cobra la comisión más baja del sistema: 0,46% de la renta imponible. Le sigue AFP Modelo con 0,58%. En comparación, la más cara es AFP Provida con 1,45%.",fuente:"Superintendencia de Pensiones 2026"},
+{id:86,tipo:"vf",bloque:6,nombreBloque:bloqueNames[5],dificultad:"Básico",pregunta:"La Declaración Jurada N° 1887 informa las retenciones por honorarios a trabajadores independientes.",esVerdadero:false,retroalimentacion:"Falso. La DJ 1887 informa las rentas del trabajo dependiente (sueldos) y el IUSC retenido. La que informa las retenciones por honorarios a trabajadores independientes es la DJ 1879.",fuente:"Semana 15, Slides 2-3 y 17"},
+{id:87,tipo:"vf",bloque:6,nombreBloque:bloqueNames[5],dificultad:"Avanzado",pregunta:"La tasa de retención de boletas de honorarios en 2026 es del 15,25%, como parte del alza gradual establecida por la Ley N° 21.133.",esVerdadero:true,retroalimentacion:"Verdadero. La Ley N° 21.133 estableció un alza gradual de la tasa de retención de honorarios: 10,75% en 2020, hasta llegar al 17% en 2028. En 2026, la tasa vigente es del 15,25%.",fuente:"Ley N° 21.133"},
+{id:88,tipo:"vf",bloque:6,nombreBloque:bloqueNames[5],dificultad:"Intermedio",pregunta:"El plazo para emitir los certificados a los trabajadores incluidos en la DJ 1887 para el Año Tributario 2026 fue el 27 de marzo de 2026.",esVerdadero:false,retroalimentacion:"Falso. El plazo para emitir los certificados fue el 14 de marzo de 2026, no el 27 de marzo. El 27 de marzo fue el plazo para presentar la propia Declaración Jurada al SII. Son dos plazos diferentes que no deben confundirse.",fuente:"Resolución Exenta SII N° 123/2025"},
+{id:89,tipo:"vf",bloque:6,nombreBloque:bloqueNames[5],dificultad:"Intermedio",pregunta:"El código de observación R07 se genera por inconsistencias entre la DJ 1879 y el Formulario N° 29.",esVerdadero:false,retroalimentacion:"Falso. El código R07 corresponde a inconsistencias entre la DJ 1887 (sueldos) y el Formulario N° 29. El código R08 es el que se genera por inconsistencias entre la DJ 1879 (honorarios) y el F29.",fuente:"Semana 15, Slides 16 y 23"},
+{id:90,tipo:"vf",bloque:6,nombreBloque:bloqueNames[5],dificultad:"Básico",pregunta:"Tanto la DJ 1887 como la DJ 1879 tienen una estructura de 3 secciones.",esVerdadero:true,retroalimentacion:"Verdadero. Ambas declaraciones juradas comparten la misma estructura de 3 secciones: Sección A (Identificación del Declarante), Sección B (Datos de los Informados) y Sección C (Cuadro de Resumen).",fuente:"Semana 15, Slides 3 y 17"},
+// ===== DESARROLLO (15 preguntas) =====
+{id:91,tipo:"desarrollo",bloque:1,nombreBloque:bloqueNames[0],dificultad:"Avanzado",pregunta:"Compare las ventajas y desventajas de constituir una SpA versus una SRL para un grupo de 3 emprendedores que quieren iniciar un negocio de tecnología. Considere al menos: responsabilidad de los socios, facilidad para incorporar nuevos inversionistas y régimen tributario.",pauta:"Puntos clave de la respuesta esperada:\n\n1) Responsabilidad: Ambas limitan la responsabilidad al capital aportado, pero la SpA ofrece mayor flexibilidad en la estructura de acciones.\n\n2) Incorporación de inversionistas: La SpA tiene una ventaja clara, ya que permite agregar socios (incluyendo personas jurídicas) simplemente emitiendo nuevas acciones, sin necesidad de modificar la escritura social. En la SRL, incorporar un nuevo socio requiere modificar los estatutos sociales.\n\n3) Régimen tributario: La SpA tributa como Sociedad Anónima (IDPC según el régimen que le corresponda). La SRL puede optar por distintos regímenes incluyendo Pro Pyme.\n\n4) Conclusión: Para un negocio de tecnología que espera crecer e incorporar inversionistas, la SpA suele ser la opción más recomendada por su flexibilidad.\n\nNormativa: Art. 424 y siguientes del Código de Comercio (SpA); Ley N° 3.918 (SRL)."},
+{id:92,tipo:"desarrollo",bloque:1,nombreBloque:bloqueNames[0],dificultad:"Intermedio",pregunta:"Explique la diferencia fundamental entre una empresa de persona natural y una empresa de persona jurídica. Incluya un ejemplo de ventaja y un ejemplo de desventaja de cada una.",pauta:"Puntos clave:\n\n1) Persona natural: El empresario opera con su propio nombre y RUT. Responde con todo su patrimonio personal por las deudas de la empresa (responsabilidad ilimitada).\n- Ventaja: Simplicidad de constitución y operación, sin costos de escritura pública.\n- Desventaja: Riesgo patrimonial total (si la empresa quiebra, pueden embargar bienes personales del dueño).\n\n2) Persona jurídica: La empresa tiene nombre, RUT y patrimonio propios, distintos a los del dueño.\n- Ventaja: Separación patrimonial (el dueño solo arriesga su aporte según el tipo societario).\n- Desventaja: Costos de constitución (escritura, publicación, inscripción) y obligaciones contables/legales más complejas.\n\nFuente: Art. 3° Código del Trabajo; Semana 11, Slides 9-11."},
+{id:93,tipo:"desarrollo",bloque:2,nombreBloque:bloqueNames[1],dificultad:"Avanzado",pregunta:"Un emprendedor quiere abrir un restaurante con venta de bebidas alcohólicas en una comuna de Santiago. Enumere y explique todos los permisos y autorizaciones que necesitaría obtener, además de la constitución legal de la empresa y el inicio de actividades en el SII.",pauta:"Permisos y autorizaciones necesarios:\n\n1) Patente comercial: Otorgada por la municipalidad donde se instalará el restaurante.\n\n2) Patente de alcoholes: Requisitos adicionales:\n   - Inscripción en el SAG\n   - Certificado de antecedentes vigente del solicitante\n   - Aprobación del concejo municipal\n   - Costo fijo entre 0,6 y 3,5 UTM (Ley de Alcoholes)\n   - Plazo de tramitación: 30-45 días\n\n3) Resolución sanitaria: Emitida por la SEREMI de Salud (obligatoria para expendio de alimentos perecibles).\n\n4) Informe de factibilidad: Emitido por la Dirección de Obras Municipales, verificando que la ubicación sea compatible con el plan regulador comunal.\n\n5) Permiso de edificación y recepción final del inmueble.\n\n6) Documento que acredite el título de ocupación del local (contrato de arriendo o certificado de dominio).\n\nFuente: Semana 12, Slides 3-9."},
+{id:94,tipo:"desarrollo",bloque:2,nombreBloque:bloqueNames[1],dificultad:"Intermedio",pregunta:"Explique qué es el plan regulador comunal y por qué es importante consultarlo antes de instalar un negocio. Dé un ejemplo concreto de un conflicto que podría surgir por no consultarlo.",pauta:"Puntos clave:\n\n1) El plan regulador comunal es un instrumento de planificación territorial que define la zonificación de la comuna: qué actividades están permitidas en cada zona (residencial, comercial, industrial, mixta, etc.).\n\n2) Importancia: La Dirección de Obras Municipales debe verificar que el local comercial no interfiera con el plan regulador antes de otorgar el informe de factibilidad. Sin este informe, no se puede obtener la patente.\n\n3) Ejemplo de conflicto: Un emprendedor arrienda un local en una zona residencial exclusiva para instalar una fábrica industrial. Al solicitar la patente, la Dirección de Obras rechaza el informe de factibilidad porque la actividad industrial no está permitida en zona residencial. El emprendedor pierde la inversión del arriendo y la adecuación del local.\n\nFuente: Semana 12, Slide 8."},
+{id:95,tipo:"desarrollo",bloque:3,nombreBloque:bloqueNames[2],dificultad:"Avanzado",pregunta:"Compare los cuatro regímenes tributarios vigentes en Chile en 2026 (Pro Pyme General, Pro Pyme Transparente, Régimen General y Renta Presunta), indicando para cada uno: tasa de IDPC, límite de ingresos, y tipo de contribuyente al que está dirigido.",pauta:"Comparación de regímenes tributarios 2026 (Ley N° 21.210):\n\n1) Pro Pyme General (Art. 14D N°3):\n   - Tasa IDPC: 12,5%\n   - Límite: Hasta 75.000 UF de ingresos anuales promedio\n   - Dirigido a: Micro, pequeñas y medianas empresas\n   - Beneficios: Depreciación instantánea, tributación simplificada\n\n2) Pro Pyme Transparente (Art. 14D N°8):\n   - Tasa IDPC: 0% (empresa liberada)\n   - Límite: Hasta 75.000 UF\n   - Dirigido a: Pymes cuyos propietarios sean 100% personas naturales con domicilio en Chile\n   - Tributación: Directamente en los dueños\n\n3) Régimen General / Semi Integrado (Art. 14A):\n   - Tasa IDPC: 27%\n   - Límite: Sin límite de ingresos\n   - Dirigido a: Empresas de mayor tamaño o que no opten por Pro Pyme\n   - Crédito: 65% del IDPC imputable a impuestos finales (100% con convenio de doble tributación)\n\n4) Renta Presunta (Art. 34):\n   - Tasa: IDPC sobre base presunta (porcentaje del avalúo fiscal o valor del vehículo)\n   - Límite: Según actividad (agrícola, transporte, minería)\n   - Dirigido a: Empresas de rubros específicos que cumplan requisitos\n\nFuente: Ley N° 21.210, SII."},
+{id:96,tipo:"desarrollo",bloque:3,nombreBloque:bloqueNames[2],dificultad:"Intermedio",pregunta:"Explique los tres principios tributarios (legalidad, proporcionalidad y equidad) y dé un ejemplo concreto de la aplicación de cada uno en el sistema tributario chileno.",pauta:"Principios tributarios:\n\n1) Legalidad: No se puede cobrar ningún impuesto que no esté establecido en la ley. Ejemplo: El IVA del 19% existe porque la Ley sobre Impuesto a las Ventas y Servicios (D.L. 825) lo establece. Ninguna autoridad puede crear un impuesto nuevo sin una ley aprobada por el Congreso.\n\n2) Proporcionalidad: Los contribuyentes deben contribuir de acuerdo a su capacidad económica. Ejemplo: El Impuesto Único de Segunda Categoría es progresivo: quienes ganan hasta 13,5 UTM no pagan impuesto, mientras que quienes ganan más pagan tasas crecientes (4%, 8%, 13,5%, hasta 40%), asegurando que quien más gana, más aporta.\n\n3) Equidad: Trato igual a contribuyentes en la misma situación económica. Ejemplo: Dos trabajadores dependientes que ganan exactamente el mismo sueldo pagan el mismo Impuesto Único de Segunda Categoría, independientemente de su género, edad o cualquier otra característica personal.\n\nFuente: Semana 13, Slide 8."},
+{id:97,tipo:"desarrollo",bloque:4,nombreBloque:bloqueNames[3],dificultad:"Avanzado",pregunta:"Realice la liquidación de sueldo completa para el siguiente caso: María tiene un sueldo base de $750.000, recibe un bono de $100.000 y una asignación de colación de $40.000. Cotiza en AFP Capital (comisión 1,44%), FONASA (7%) y seguro de cesantía con contrato indefinido (0,6%). Calcule: total imponible, total no imponible, cotizaciones previsionales, y determine si debe pagar Impuesto Único de Segunda Categoría (considere que el tramo exento llega hasta aproximadamente $965.000 de renta tributable con UTM de junio 2026).",pauta:"Desarrollo paso a paso:\n\n1) Identificar haberes imponibles y no imponibles:\n   - Imponibles: Sueldo base $750.000 + Bono $100.000 = $850.000\n   - No imponibles: Colación $40.000\n   - Total haberes: $890.000\n\n2) Calcular cotizaciones previsionales:\n   - AFP Capital: $850.000 × (10% + 1,44%) = $850.000 × 11,44% = $97.240\n   - FONASA: $850.000 × 7% = $59.500\n   - Seguro cesantía: $850.000 × 0,6% = $5.100\n   - Total cotizaciones: $161.840\n\n3) Calcular renta tributable:\n   - Renta tributable = $850.000 - $161.840 = $688.160\n\n4) Impuesto Único de Segunda Categoría:\n   - Si el tramo exento llega hasta ≈$965.000 (13,5 UTM con UTM junio 2026 de $71.506), la renta tributable de $688.160 está DENTRO del tramo exento.\n   - IUSC = $0\n\n5) Sueldo líquido:\n   - $890.000 - $161.840 - $0 = $728.160\n\nFuente: Semana 14a; valores AFP 2026; UTM junio 2026."},
+{id:98,tipo:"desarrollo",bloque:4,nombreBloque:bloqueNames[3],dificultad:"Intermedio",pregunta:"Explique la diferencia entre los conceptos que constituyen remuneración y los que no constituyen remuneración según la legislación chilena. ¿Por qué es importante hacer esta distinción? Dé al menos 3 ejemplos de cada categoría.",pauta:"Puntos clave:\n\n1) Constituyen remuneración (son contraprestaciones por el trabajo): sueldo base, sobresueldo (horas extras), comisiones, participaciones, gratificaciones. Son imponibles (base de cálculo para cotizaciones previsionales e impuestos).\n\n2) No constituyen remuneración: asignación de movilización, colación, viáticos, pérdida de caja, desgaste de herramientas, prestaciones familiares, indemnizaciones por años de servicio, devoluciones de gastos. No son imponibles.\n\n3) Importancia de la distinción:\n   - Los conceptos que son remuneración se incluyen en la base imponible para calcular cotizaciones previsionales (AFP, salud, AFC) e impuesto a la renta.\n   - Los que no son remuneración quedan fuera de esa base, por lo que no se les descuenta cotización ni impuesto.\n   - Esta distinción afecta directamente el costo laboral para el empleador y el líquido que recibe el trabajador.\n\nFuente: Art. 41 Código del Trabajo."},
+{id:99,tipo:"desarrollo",bloque:5,nombreBloque:bloqueNames[4],dificultad:"Intermedio",pregunta:"Un trabajador está afiliado a AFP Provida y quiere cambiarse a AFP Uno. Explique la diferencia en comisiones entre ambas AFPs en 2026 y calcule cuánto ahorraría mensualmente si su renta imponible es de $800.000.",pauta:"Desarrollo:\n\n1) Comisiones 2026:\n   - AFP Provida: 1,45% (la más alta del sistema)\n   - AFP Uno: 0,46% (la más baja del sistema)\n   - Diferencia: 0,99 puntos porcentuales\n\n2) Cálculo del ahorro mensual:\n   - Comisión en Provida: $800.000 × 1,45% = $11.600\n   - Comisión en Uno: $800.000 × 0,46% = $3.680\n   - Ahorro mensual: $11.600 - $3.680 = $7.920\n   - Ahorro anual: $7.920 × 12 = $95.040\n\n3) Nota importante: La cotización obligatoria del 10% para pensión se mantiene igual independientemente de la AFP elegida. Solo varía la comisión. El trabajador debe considerar también otros factores como la rentabilidad de los fondos, el servicio al cliente y la cobertura.\n\nFuente: Superintendencia de Pensiones 2026."},
+{id:100,tipo:"desarrollo",bloque:5,nombreBloque:bloqueNames[4],dificultad:"Avanzado",pregunta:"Explique qué son los topes imponibles previsionales, por qué existen, y calcule el monto máximo en pesos que un trabajador podría cotizar en AFP en junio de 2026 (considere UF ≈ $38.100 para ese mes). Incluya en su respuesta la diferencia entre el tope de AFP y el tope de AFC.",pauta:"Puntos clave:\n\n1) Definición: Los topes imponibles son los montos máximos de renta sobre los cuales se calculan las cotizaciones previsionales. Si la renta supera el tope, las cotizaciones se calculan solo sobre el tope, no sobre el total.\n\n2) Razón de existencia: Limitan el monto máximo de cotización para equilibrar el sistema previsional y evitar que las altas rentas generen cotizaciones desproporcionadas.\n\n3) Cálculo en pesos (junio 2026, UF ≈ $38.100):\n   - Tope AFP/Salud: 90,0 UF × $38.100 = $3.429.000\n   - Cotización máxima AFP (solo 10% obligatorio): $3.429.000 × 10% = $342.900\n   - Tope AFC: 135,2 UF × $38.100 = $5.152.320\n\n4) Diferencia: El tope AFC (135,2 UF) es significativamente mayor que el tope AFP (90,0 UF), lo que significa que un trabajador con renta entre esos dos topes seguirá cotizando seguro de cesantía sobre su renta completa pero su cotización de AFP se calculará solo sobre 90 UF.\n\nFuente: Superintendencia de Pensiones 2026, Previred."},
+{id:101,tipo:"desarrollo",bloque:6,nombreBloque:bloqueNames[5],dificultad:"Avanzado",pregunta:"Una empresa recibió una boleta de honorarios de $1.000.000 en marzo de 2026 y otra de $600.000 en julio de 2026 del mismo trabajador independiente. Calcule las retenciones aplicables y explique cómo se informarían en la DJ 1879 para el Año Tributario 2027.",pauta:"Desarrollo:\n\n1) Tasa de retención 2026: 15,25% (Ley N° 21.133)\n\n2) Cálculo de retenciones:\n   - Boleta marzo: $1.000.000 × 15,25% = $152.500\n   - Boleta julio: $600.000 × 15,25% = $91.500\n   - Total retenciones: $244.000\n\n3) Actualización por IPC: Para la DJ 1879 del AT 2027 (sobre rentas del año comercial 2026), ambas retenciones deberán actualizarse por la variación del IPC desde el mes de emisión hasta diciembre de 2026 (factores que publicará el SII).\n\n4) Declaración en DJ 1879:\n   - Se informa en una sola línea por trabajador\n   - Sección B: RUT del trabajador, monto retenido anual actualizado, periodos marzo y julio marcados\n   - Sección C: Total honorarios sin actualizar ($1.600.000)\n   - Cuadratura: Debe coincidir con el código 151 de los F29 de marzo y julio de 2026\n\nFuente: Ley N° 21.133, Semana 15 Slides 17-23."},
+{id:102,tipo:"desarrollo",bloque:6,nombreBloque:bloqueNames[5],dificultad:"Intermedio",pregunta:"Explique qué es la cuadratura entre las Declaraciones Juradas y el Formulario N° 29. ¿Qué consecuencias tiene una inconsistencia? ¿Cómo se soluciona?",pauta:"Puntos clave:\n\n1) Cuadratura: Es la verificación que realiza el SII para asegurar que las retenciones informadas en las DJ coincidan con las efectivamente declaradas y pagadas en los Formularios N° 29 mensuales durante el año.\n   - DJ 1887 se cuadra con el código 48 del F29 (retención IUSC)\n   - DJ 1879 se cuadra con el código 151 del F29 (retención honorarios)\n\n2) Consecuencias de inconsistencias:\n   - Se generan observaciones con códigos específicos: R07 (DJ 1887 vs F29) y R08 (DJ 1879 vs F29)\n   - Pueden generar problemas en las declaraciones de renta de los trabajadores informados\n   - Posibles multas y sanciones tributarias\n\n3) Solución:\n   - Verificar los montos declarados en ambos formularios y corregir el que corresponda\n   - Verificar que no existan giros de impuestos impagos asociados a algún F29\n   - Pagar los giros pendientes para levantar la observación\n   - Verificar coherencia del IUSC por rentas accesorias pagadas entre enero y abril del año siguiente\n\nFuente: Semana 15, Slides 16 y 23."},
+{id:103,tipo:"desarrollo",bloque:4,nombreBloque:bloqueNames[3],dificultad:"Avanzado",pregunta:"Calcule la gratificación legal mensual para un trabajador con remuneración imponible de $1.200.000, considerando el sueldo mínimo de 2026 ($539.000). Explique paso a paso el procedimiento y determine si aplica o no el tope legal.",pauta:"Desarrollo paso a paso:\n\n1) Cálculo de la gratificación (25% de remuneración imponible):\n   Gratificación = $1.200.000 × 25% = $300.000\n\n2) Cálculo del tope máximo legal:\n   Tope anual = 4,75 × Ingreso Mínimo Mensual\n   Tope anual = 4,75 × $539.000 = $2.560.250\n   Tope mensual = $2.560.250 ÷ 12 = $213.354\n\n3) Comparación:\n   Gratificación calculada ($300.000) > Tope mensual ($213.354)\n   SÍ aplica el tope.\n\n4) Gratificación a pagar: $213.354 (el tope legal mensual)\n\n5) Explicación: Cuando el 25% de la remuneración imponible supera el tope de 4,75 ingresos mínimos mensuales (calculado con el sueldo mínimo vigente al 31 de diciembre del año respectivo), el empleador solo está obligado a pagar hasta el tope.\n\nFuente: Art. 50 Código del Trabajo; sueldo mínimo 2026 (Ley N° 21.751)."},
+{id:104,tipo:"desarrollo",bloque:3,nombreBloque:bloqueNames[2],dificultad:"Intermedio",pregunta:"Una micro empresa familiar (4 socios, todos personas naturales residentes en Chile) tiene ingresos anuales promedio de 20.000 UF. ¿Qué régimen o regímenes tributarios podría elegir? ¿Cuál le recomendaría y por qué?",pauta:"Análisis:\n\n1) Regímenes a los que puede optar:\n   - Pro Pyme General (Art. 14D N°3): Sí, porque sus ingresos (20.000 UF) son inferiores a 75.000 UF.\n   - Pro Pyme Transparente (Art. 14D N°8): Sí, porque todos sus propietarios son personas naturales con domicilio en Chile y cumple el límite de ingresos.\n   - Régimen General (Art. 14A): Sí, cualquier empresa puede optar, pero no es conveniente para una Pyme.\n   - Renta Presunta: Solo si su actividad es agrícola, transporte o minería y cumple los requisitos.\n\n2) Recomendación: Pro Pyme Transparente, porque:\n   - La empresa queda completamente liberada del IDPC (0%)\n   - Los dueños tributan directamente con su Global Complementario\n   - Es el régimen más simple administrativamente\n   - Al ser 100% personas naturales chilenas, cumplen todos los requisitos\n   - Si sus rentas individuales son bajas, podrían quedar en tramos exentos o de baja tasa\n\n3) Alternativa: Si los socios tienen rentas altas por otras fuentes, podría convenir el Pro Pyme General (IDPC 12,5%) para diferir la tributación personal.\n\nFuente: Ley N° 21.210."},
+{id:105,tipo:"desarrollo",bloque:6,nombreBloque:bloqueNames[5],dificultad:"Intermedio",pregunta:"Explique por qué la tasa de retención de boletas de honorarios ha ido aumentando gradualmente desde 2020 (10,75%) hasta 2026 (15,25%) y cuál es la meta final de este proceso. ¿Qué relación tiene con las cotizaciones previsionales de los trabajadores independientes?",pauta:"Puntos clave:\n\n1) Contexto: La Ley N° 21.133 (2019) estableció la obligatoriedad gradual de cotizar para los trabajadores independientes que emiten boletas de honorarios.\n\n2) Mecanismo: El alza gradual de la tasa de retención financia las cotizaciones previsionales de los independientes (AFP, salud, seguro de cesantía, SIS, accidentes). La retención se destina primero a cubrir esas cotizaciones y el remanente (si existe) se imputa como pago provisional de impuesto.\n\n3) Cronograma:\n   - 2020: 10,75%\n   - 2025: 14,5%\n   - 2026: 15,25%\n   - 2027: 16%\n   - 2028: 17% (meta final)\n\n4) Objetivo: Equiparar progresivamente la protección social de los trabajadores independientes con la de los dependientes, asegurando que también coticen para pensión, salud y cesantía.\n\n5) Impacto: El trabajador independiente recibe un monto líquido menor por cada boleta, pero a cambio acumula fondos en su AFP, tiene cobertura de salud y seguro de cesantía.\n\nFuente: Ley N° 21.133; actualización 2026."}
+];
+
+// ===== QUIZ ENGINE =====
+const state={answers:{},correct:0,wrong:0};
+const totalScored=preguntas.filter(p=>p.tipo!=="desarrollo").length;
+
+function renderNav(){
+const nav=document.getElementById("navBlocks");
+nav.innerHTML="";
+for(let b=1;b<=6;b++){
+const qs=preguntas.filter(p=>p.bloque===b&&p.tipo!=="desarrollo");
+const ans=qs.filter(p=>state.answers[p.id]!==undefined).length;
+const btn=document.createElement("button");
+btn.className="nav-btn";
+btn.innerHTML=`B${b}: ${bloqueNames[b-1]} <span class="prog">${ans}/${qs.length}</span>`;
+btn.onclick=()=>{const el=document.getElementById("bloque-"+b);if(el)el.scrollIntoView({behavior:"smooth",block:"start"})};
+nav.appendChild(btn);
+}
+}
+
+function updatePanel(){
+const pct=totalScored>0?Math.round((state.correct+state.wrong)/totalScored*100):0;
+document.getElementById("fpOk").textContent=state.correct;
+document.getElementById("fpFail").textContent=state.wrong;
+document.getElementById("fpPct").textContent=pct+"%";
+document.getElementById("mainProgress").style.width=pct+"%";
+if(state.correct+state.wrong>0){
+const pctOk=state.correct/(state.correct+state.wrong);
+const nota=Math.max(1,Math.min(7,1+pctOk*6)).toFixed(1);
+document.getElementById("fpNota").textContent=nota;
+}
+renderNav();
+if(state.correct+state.wrong===totalScored)showSummary();
+}
+
+function handleAnswer(qId,selected,isCorrect){
+if(state.answers[qId]!==undefined)return;
+state.answers[qId]=selected;
+if(isCorrect)state.correct++;else state.wrong++;
+updatePanel();
+}
+
+function renderAlternativa(q){
+const card=document.createElement("div");
+card.className="card";
+card.id="q-"+q.id;
+const letters=["A","B","C","D"];
+card.innerHTML=`
+<div class="card-header">
+<span class="q-number">Pregunta ${q.id}</span>
+<div class="q-badges">
+<span class="bloque-badge ${bloqueClasses[q.bloque-1]}">${q.nombreBloque}</span>
+<span class="diff-badge">${q.dificultad}</span>
+</div>
+</div>
+<div class="q-text">${q.pregunta}</div>
+<div class="options" id="opts-${q.id}">
+${q.alternativas.map((a,i)=>`<button class="opt-btn" data-idx="${i}" onclick="selectAlt(${q.id},${i},${q.correcta})"><span class="letter">${letters[i]}.</span><span>${a}</span></button>`).join("")}
+</div>
+<div class="feedback" id="fb-${q.id}"></div>`;
+return card;
+}
+
+function selectAlt(qId,idx,correctIdx){
+if(state.answers[qId]!==undefined)return;
+const q=preguntas.find(p=>p.id===qId);
+const opts=document.querySelectorAll(`#opts-${qId} .opt-btn`);
+const isCorrect=idx===correctIdx;
+handleAnswer(qId,idx,isCorrect);
+opts.forEach((btn,i)=>{
+btn.classList.add("disabled");
+if(i===correctIdx)btn.classList.add("correct");
+if(i===idx&&!isCorrect)btn.classList.add("wrong");
+});
+const fb=document.getElementById("fb-"+qId);
+fb.className=`feedback show ${isCorrect?"correct-fb":"wrong-fb"}`;
+let html=`<div class="fb-title ${isCorrect?"ok":"fail"}">${isCorrect?"✓ ¡Correcto!":"✗ Incorrecto"}</div>`;
+if(!isCorrect)html+=`<div style="margin-bottom:.3rem;color:var(--green);font-size:.82rem">Respuesta correcta: <strong>${["A","B","C","D"][correctIdx]}</strong></div>`;
+html+=`<div>${q.retroalimentacion}</div>`;
+if(q.fuente)html+=`<span class="fb-source">${q.fuente}</span>`;
+fb.innerHTML=html;
+}
+
+function renderVF(q){
+const card=document.createElement("div");
+card.className="card";
+card.id="q-"+q.id;
+card.innerHTML=`
+<div class="card-header">
+<span class="q-number">Pregunta ${q.id}</span>
+<div class="q-badges">
+<span class="bloque-badge ${bloqueClasses[q.bloque-1]}">${q.nombreBloque}</span>
+<span class="diff-badge">${q.dificultad}</span>
+</div>
+</div>
+<div class="q-text">${q.pregunta}</div>
+<div class="vf-options" id="opts-${q.id}">
+<button class="vf-btn" onclick="selectVF(${q.id},true,${q.esVerdadero})">VERDADERO</button>
+<button class="vf-btn" onclick="selectVF(${q.id},false,${q.esVerdadero})">FALSO</button>
+</div>
+<div class="feedback" id="fb-${q.id}"></div>`;
+return card;
+}
+
+function selectVF(qId,selected,correct){
+if(state.answers[qId]!==undefined)return;
+const q=preguntas.find(p=>p.id===qId);
+const isCorrect=selected===correct;
+handleAnswer(qId,selected,isCorrect);
+const btns=document.querySelectorAll(`#opts-${qId} .vf-btn`);
+btns.forEach(btn=>{
+btn.classList.add("disabled");
+const isV=btn.textContent==="VERDADERO";
+if(isV===correct)btn.classList.add("correct");
+if(isV===selected&&!isCorrect)btn.classList.add("wrong");
+if(!isV===!correct)btn.classList.add("correct");
+if(!isV===!selected&&!isCorrect)btn.classList.add("wrong");
+});
+// Fix: only the correct answer gets "correct" class
+btns.forEach(btn=>{
+btn.classList.remove("correct","wrong");
+btn.classList.add("disabled");
+const isV=btn.textContent==="VERDADERO";
+if((isV&&correct)||(!isV&&!correct))btn.classList.add("correct");
+if((isV&&selected&&!isCorrect)||(!isV&&!selected&&!isCorrect))btn.classList.add("wrong");
+});
+const fb=document.getElementById("fb-"+qId);
+fb.className=`feedback show ${isCorrect?"correct-fb":"wrong-fb"}`;
+let html=`<div class="fb-title ${isCorrect?"ok":"fail"}">${isCorrect?"✓ ¡Correcto!":"✗ Incorrecto"}</div>`;
+if(!isCorrect)html+=`<div style="margin-bottom:.3rem;color:var(--green);font-size:.82rem">Respuesta correcta: <strong>${correct?"VERDADERO":"FALSO"}</strong></div>`;
+html+=`<div>${q.retroalimentacion}</div>`;
+if(q.fuente)html+=`<span class="fb-source">${q.fuente}</span>`;
+fb.innerHTML=html;
+}
+
+function renderDev(q){
+const card=document.createElement("div");
+card.className="card dev-card";
+card.id="q-"+q.id;
+card.innerHTML=`
+<div class="card-header">
+<span class="q-number">Pregunta ${q.id} — Desarrollo</span>
+<div class="q-badges">
+<span class="bloque-badge ${bloqueClasses[q.bloque-1]}">${q.nombreBloque}</span>
+<span class="diff-badge">${q.dificultad}</span>
+</div>
+</div>
+<div class="q-text">${q.pregunta}</div>
+<textarea class="dev-textarea" placeholder="Escribe tu respuesta aquí..."></textarea>
+<button class="pauta-btn" onclick="togglePauta(${q.id})">Ver pauta de respuesta</button>
+<div class="pauta" id="pauta-${q.id}"><strong>Pauta de respuesta esperada:</strong><br><br>${q.pauta.replace(/\n/g,"<br>")}</div>`;
+return card;
+}
+
+function togglePauta(qId){
+const p=document.getElementById("pauta-"+qId);
+p.classList.toggle("show");
+}
+
+function showSummary(){
+const pctOk=state.correct/totalScored;
+const nota=Math.max(1,Math.min(7,1+pctOk*6)).toFixed(1);
+const aprobado=parseFloat(nota)>=4.0;
+let msg="";
+if(parseFloat(nota)>=6.5)msg="¡Excelente trabajo! Dominas los contenidos del módulo EA3 con solidez.";
+else if(parseFloat(nota)>=5.5)msg="¡Muy bien! Tienes un buen manejo de la materia. Revisa los temas donde tuviste errores.";
+else if(parseFloat(nota)>=4.0)msg="Aprobado. Hay áreas que puedes reforzar. Revisa las preguntas fallidas para mejorar.";
+else msg="Necesitas repasar los contenidos. Revisa las retroalimentaciones de cada pregunta y vuelve a intentar.";
+let bloqueHtml="";
+for(let b=1;b<=6;b++){
+const qs=preguntas.filter(p=>p.bloque===b&&p.tipo!=="desarrollo");
+const ok=qs.filter(p=>{
+if(p.tipo==="alternativa")return state.answers[p.id]===p.correcta;
+if(p.tipo==="vf")return state.answers[p.id]===p.esVerdadero;
+return false;
+}).length;
+bloqueHtml+=`<div class="sg-item"><div class="sg-label">${bloqueNames[b-1]}</div><div class="sg-val" style="color:${ok/qs.length>=0.6?"var(--green)":"var(--red)"}">${ok}/${qs.length} (${Math.round(ok/qs.length*100)}%)</div></div>`;
+}
+const box=document.getElementById("summaryBox");
+box.innerHTML=`
+<h2>Resultado Final</h2>
+<div class="summary-nota" style="color:${aprobado?"var(--green)":"var(--red)"}">${nota}</div>
+<div class="summary-msg">${msg}</div>
+<div style="display:flex;gap:1rem;justify-content:center;margin:.5rem 0">
+<div style="text-align:center"><div style="font-size:1.5rem;font-weight:700;color:var(--green)">${state.correct}</div><div style="font-size:.75rem;color:var(--text2)">Correctas</div></div>
+<div style="text-align:center"><div style="font-size:1.5rem;font-weight:700;color:var(--red)">${state.wrong}</div><div style="font-size:.75rem;color:var(--text2)">Incorrectas</div></div>
+<div style="text-align:center"><div style="font-size:1.5rem;font-weight:700;color:var(--accent)">${Math.round(pctOk*100)}%</div><div style="font-size:.75rem;color:var(--text2)">Aciertos</div></div>
+</div>
+<div class="summary-grid">${bloqueHtml}</div>
+<div class="summary-btns">
+<button class="sum-btn" onclick="showWrong()">Ver preguntas fallidas</button>
+<button class="sum-btn primary" onclick="resetQuiz()">Reiniciar evaluación</button>
+</div>`;
+document.getElementById("summaryOverlay").classList.add("show");
+}
+
+function showWrong(){
+document.getElementById("summaryOverlay").classList.remove("show");
+document.querySelectorAll(".card").forEach(c=>{
+const qId=parseInt(c.id.replace("q-",""));
+const q=preguntas.find(p=>p.id===qId);
+if(!q||q.tipo==="desarrollo"){c.classList.add("hidden");return;}
+if(q.tipo==="alternativa"&&state.answers[qId]===q.correcta){c.classList.add("hidden");return;}
+if(q.tipo==="vf"&&state.answers[qId]===q.esVerdadero){c.classList.add("hidden");return;}
+c.classList.remove("hidden");
+});
+document.querySelectorAll(".section-title").forEach(t=>t.classList.add("hidden"));
+window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function resetQuiz(){
+state.answers={};state.correct=0;state.wrong=0;
+document.getElementById("summaryOverlay").classList.remove("show");
+buildQuiz();
+updatePanel();
+document.getElementById("fpNota").textContent="—";
+window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function buildQuiz(){
+const container=document.getElementById("quizContainer");
+container.innerHTML="";
+// Section A
+const altQs=preguntas.filter(p=>p.tipo==="alternativa");
+const titleA=document.createElement("h2");
+titleA.className="section-title";titleA.id="secA";
+titleA.innerHTML=`<span class="icon">📝</span> Sección A — Preguntas de Alternativas (${altQs.length})`;
+container.appendChild(titleA);
+let currentBloque=0;
+altQs.forEach(q=>{
+if(q.bloque!==currentBloque){
+currentBloque=q.bloque;
+const bTitle=document.createElement("h3");
+bTitle.id="bloque-"+q.bloque;
+bTitle.style.cssText="font-size:1.1rem;color:var(--accent);margin:1.5rem 0 .8rem;padding-left:.5rem;border-left:3px solid var(--accent)";
+bTitle.textContent=`Bloque ${q.bloque}: ${bloqueNames[q.bloque-1]}`;
+container.appendChild(bTitle);
+}
+container.appendChild(renderAlternativa(q));
+});
+// Section B
+const vfQs=preguntas.filter(p=>p.tipo==="vf");
+const titleB=document.createElement("h2");
+titleB.className="section-title";titleB.id="secB";
+titleB.innerHTML=`<span class="icon">✅</span> Sección B — Verdadero o Falso (${vfQs.length})`;
+container.appendChild(titleB);
+vfQs.forEach(q=>container.appendChild(renderVF(q)));
+// Section C
+const devQs=preguntas.filter(p=>p.tipo==="desarrollo");
+const titleC=document.createElement("h2");
+titleC.className="section-title";titleC.id="secC";
+titleC.innerHTML=`<span class="icon">💡</span> Sección C — Preguntas de Desarrollo (${devQs.length})`;
+container.appendChild(titleC);
+devQs.forEach(q=>container.appendChild(renderDev(q)));
+// spacer
+const spacer=document.createElement("div");
+spacer.style.height="80px";
+container.appendChild(spacer);
+}
+
+// Init
+buildQuiz();
+renderNav();
+updatePanel();
+</script>
+</body>
+</html>
